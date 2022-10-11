@@ -1,0 +1,17 @@
+# information required for local (LAN) or distant connection
+# 'loc' and 'dist' are possible prefix to indicate the context
+# in witch a variable should be considered
+
+# server name : $srv variable
+locsrv=chsens
+distsrv=pom.ch-sens
+
+# transfert command : $_rsync variable
+loc_rsync="rsync -Pav"
+dist_rsync="rsync -Pav -e 'ssh cmd@na -- '"
+
+# local port definition for web tunnel, used by webdist
+# the value will be added 22000, 
+# thus locport=100 results in port=22100
+locport=200
+

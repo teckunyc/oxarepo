@@ -1,0 +1,53 @@
+- Générer un dump et gzipper
+# mysqldump -uroot -p --databases <database> | gzip > <database>.sql.gz
+
+- killer les requetes "SELECT"
+# for i in `mysql -e"show full processlist"|grep SELECT|awk '{print $1}'` ; do mysql -e"kill $i" ; done
+
+- Créer une base
+# create database <nom base>;
+
+- Créer un user associé à une bdd avec les droits "all privileges"
+# grant all privileges on `DATABASE`.* to 'USER'@'%' identified by 'PASSWD';
+
+- Tester la connexion à une bdd
+# mysql -u <login> -p <database>
+
+- Lister les requêtes en cours
+# show processlist;
+# show full processlist;
+
+- Lister les transactions en cours
+# show engine innodb status;
+
+- Killer une transaction
+# kill query <ID>;
+
+- Liste droits utilisateur mysql
+# select * user,host from mysql.user
+
+- Executer mysqltuner depuis le front vers un RDS
+# perl mysqltuner --host <hostname>  --forcemem <size - Amount of RAM installed in megabytes >
+
+
+CREATE DATABASE parade_museeair;
+GRANT ALL PRIVILEGES ON parade_museeair.* TO "parade_museeair"@"%" IDENTIFIED BY 'V2iuchQKYrPUc';
+FLUSH PRIVILEGES;
+
+
+## ATOS
+Dump de la base de prod:
+mysqldump -uroot -p --databases atos_net | gzip > /space/atos_net.0903.sql.gz
+vila
+mysqldump -uroot -p --databases atos_net | gzip > /space/atos_net.0903.sql.gz
+
+
+# Dump d'une table detenue dans une base
+mysqldump ecig_arrete_fr ps_mailalert_customer_oos > /space/home/webadmin/ps_mailalert_customer_oos_12032017.sql
+
+# LACTALIS RDS AWS
+les bdd dans le cloud sont des "RDS" qui ne sont accessibles que par les "fronts"
+il faut lancer ce type de commande:
+root@lactalis.aws-eu-west-1.www-01 ~ # mysql -uroot -p -hbdd01.cmlpjo0dk92c.eu-west-1.rds.amazonaws.com
+#exemple_fonctionnel
+mysqldump -uroot -p -hbdd01.cmlpjo0dk92c.eu-west-1.rds.amazonaws.com --databases bienmanger | gzip > /space/bienmanger_14032017.sql.gz

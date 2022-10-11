@@ -1,0 +1,509 @@
+# netstat -lnpt
+# sudo netstat -alpen --inet | grep 3333
+# sudo netstat -tulp
+# sudo netstat -tupan | grep 161
+# dmesg | grep -v 'IN\='
+# rpm -qa | grep release
+--------------------------------------------------------------------------------
+cat log-*.log | grep -v cron.info | grep -v mail.info | grep -v daemon.notice | grep -v syslog.notice | grep -v authpriv.info | grep -v cron.notice
+
+cat /tmp/log-*.log | grep -i cron.info | grep -i mail.info | grep -i daemon.notice | grep -i syslog.notice | grep -i authpriv.info | grep -i cron.notice
+
+Generer passwd password
+# pwgen -n -c -y 12 1
+# ssh-keygen -t rsa -b 2048
+--------------------------------------------------------------------------------
+Disk Full
+Le disque du serveur POM peut se retrouver saturé (espace occupé à 100%); il en résulte des comportements sporadiques et des problèmes de connexions utilisateurs.
+L'une des première chose à vérifier est ce point. L'espace Disque!
+
+Vérifier le taux d'occupation du système:
+# df -kTh
+
+Exemple:
+[root@srv-pom ~]# df -kTh
+Filesystem           Type   Size  Used Avail Use% Mounted on
+/dev/cciss/c0d0p1    ext4   7.8G  2.5G  4.9G  34% /
+tmpfs                tmpfs  938M     0  938M   0% /dev/shm
+/dev/mapper/data-full
+                     ext4    49G   30G   17G  64% /data
+/dev/cciss/c0d0p3    ext4   2.0G  766M  1.1G  42% /var
+/dev/cciss/c0d0p2    ext4   7.8G  1.5G  6.0G  20% /var/backup
+tmpfs                tmpfs  128M  640K  128M   1% /var/nagios/checkresults
+
+Si /var/ se retrouve à 100%, les soucis fonctionnels s’enchaîneront.
+
+La procédure consiste à libérer de l'espace disque, en déplaçant certains fichiers de log, notamment le fichier “messages” et ses archives contenus dans /var/log/.
+
+Se déplacer dans le répertoire concerné:
+# cd /var/log
+# service syslog-ng stop # stopper momentanément les logs
+# cp messages-201* /data/log/messages/archives/ # copier les archives dans le répertoire (le créer si besoin)
+# cp messages /data/log/messages/ # copier le fichier concerné
+
+Créer un lien symbolique de /var/log/messages vers /data/log/messages, afin que la journalisation se fasse.
+# ln -s /data/log/messages/messages /var/log/messages
+
+Il faut à présent modifier le job de logrotate, pour lui indiquer, où se trouvera à présent le fichier de journalisation “message”.
+# cd /etc/logrotate.d/
+# vi syslog
+
+Le contenu par défaut de syslog:
+/var/log/messages {
+  sharedscripts
+  postrotate
+    /bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
+  endscript
+}
+
+Le même, avec les nouvelles dispositions
+/data/log/messages/messages {
+  sharedscripts
+  postrotate
+    /bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
+  endscript
+}
+
+S'assurer qu'il n'y aura pas de soucis:
+# cd /etc/logrotate.d/
+# logrotate -d /etc/logrotate.conf
+Si pas de messages d'erreur, relancer le service
+# service syslog-ng start
+--------------------------------------------------------------------------------
+# Liste des Urls utiles:
+Support sur incidents "check sup"
+https://synapse.oxalide.net/display/procs/
+
+# Visu Mondash
+https://mondash.oxalide.net
+
+# Visu Monitoring Centreon
+https://monitoring.oxalide.com/main.php?
+
+# Portail global Oxalide
+https://portail.oxalide.com/#
+
+# Gestion time spend tickets
+https://pilot.oxalide.com/plugins/servlet/wtcalendar
+
+# Infos et contextes CLT
+https://exploit.oxalide.com/
+
+# # commandes utiles MCO
+https://synapse.oxalide.net/display/procs/Partage+de+commandes+basiques+Linux
+
+# url originale:
+https://synapse.oxalide.net/display/procs/Partage+de+commandes+basiques+Linux
+
+## APACHE
+# vérif syntaxe fichiers de conf.
+:apache2ctl -t
+
+# Lister les vhost actifs
+: apache2ctl -S
+
+# Reload de la configuration
+: apache2ctl -k graceful
+
+# Lister les IP effectuant le plus de HIT
+: tail -n 100000 access.log | awk '{print $1}' | sort | uniq -c | sort | tail -10
+# Lister les IP les plus présentes par tranche horaire
+: grep "20/Jul/2016:20:" access.log | awk '{print $1}' | sort -n | uniq -c | sort | tail -n 10
+
+# Obtenir un server-status d'apache
+Faire un netstat -lntp | grep apache (afin d'obtenir le port utilisé)
+: http_proxy= lynx http://localhost/server-status
+: http_proxy= lynx 0:8080/server-status (si apache écoute sur le port 8080)
+
+# Lister les modules Actifs
+:apache2ctl -T -D DUMP_MODULES
+# Voir module compilé
+: apache2ctl -l
+
+## NGINX
+# Vérif syntaxe
+: nginx -t
+
+# Obtenir un nginx_status de nginx
+
+http_proxy= lynx http://localhost:80/nginx_status
+
+Obtenir des informations sur la réplication (dans la console mongo)
+	db.runCommand("ismaster")
+
+Importer un fichier JSON dans la base
+
+
+mongoimport --db <base de donnée> --collection <collection> --file /chemin/fichier.json --jsonArray
+Vérifier la syntaxe
+
+varnishd -C -f /etc/varnish/default.vcl
+
+Recharger la configuration varnish
+
+service varnish reload
+
+Redémarrer varnish ((avertissement) Perte du cache)	service varnish restart
+Vérifier l'état des backends
+
+varnishadm backend.list
+
+Effectuer un BAN d'url manuellement
+
+varnishadm
+
+> ban req.http.host ~ <vhost> && req.url ~ <url>
+
+Obtenir les stats varnish en direct
+
+varnishstat
+
+Obtenir les logs varnish en direct
+
+varnishlog
+
+Obtenir les informations trafic
+
+varnishtop
+
+Obtenir les anciennes versions du vcl et celle active
+
+varnishadm vcl.list
+
+Afficher une ancienne ou active version du vcl
+
+varnishadm vcl.show <hash_du_vcl>
+
+
+# SSH / SFTP / SCP
+Télécharger un fichier à partir du bastion (bastion <-- machineClient/fichierCible)
+se connecter au bastion et à partir de lui:
+scp <user@machineCible:dir/foo/file /space/home/$USER
+EX:
+scp admoxa@regards.aws-eu-west-1.mq-01a:/tmp/dpkg.list .
+
+
+Générer un dump et gzipper en même temps
+
+
+mysqldump -uroot -p --databases <database> | gzip > <database>.sql.gz
+
+Killer les requêtes "selects"
+
+
+for i in `mysql -e"show full processlist"|grep SELECT|awk '{print $1}'` ; do mysql -e"kill $i" ; done
+
+Créer une base de données (depuis mysql)
+
+create database <nom base>;
+
+Créer un user associé à une bdd avec les droits "all privileges"
+
+grant all privileges on `DATABASE`.* to 'USER'@'%' identified by 'PASSWD';
+
+Tester la connexion à une bdd
+
+mysql -u <login> -p <database>
+
+Lister les requêtes en cours
+
+show processlist;
+
+show full processlist;
+
+Lister les transactions en cours
+
+show engine innodb status;
+
+Killer une transaction
+
+kill query <ID>;
+
+Visualise la commande suivante en partant du début
+
+pager less;
+
+Liste droits utilisateur mysql
+
+select * user,host from mysql.user
+
+Executer mysqltuner depuis le front vers un RDS
+
+perl mysqltuner --host <hostname>  --forcemem <size - Amount of RAM installed in megabytes >
+
+
+
+
+Vérification avant installation d'un package
+
+apt-get install -s mon_paquet
+
+Information du package
+
+apt-cache show $package
+
+Lister les services en écoute
+
+netstat -ltpen
+
+Mémoire disponible
+
+free -mt
+
+Espace disponible par partition
+
+df -h
+
+Effectuer un scan disk d'une partition
+
+ncdu -x /$dir
+
+Effectuer un scan disk d'une partition sans les snapshots
+
+ncdu --exclude .snapshot
+
+Exclure les snapshots avec du
+
+du -sh --exclude=.snapshot * .[^.]*
+
+Voir en temps réel l'exécution d'une commande
+
+strace -t -p $PID
+
+Lister les process en cours d'exécution
+
+ps faux | grep $process
+
+Tester une URL (http/https)
+
+unset http_proxy ou unset https_proxy
+
+curl -IH "host: <vhost>" localhost/<url>
+
+curl -IH --insecure "host: <vhost>" https://localhost:443/<url>
+
+Augmenter la partition /var/tmp
+
+exemple: 1Go
+
+
+mount -o remount,size=1G /var/tmp
+
+Obtenir la version du kernel
+
+uname -a
+
+Lister les process qui consomment le plus de SWAP
+
+for file in /proc/*/status ; do awk '/VmSwap|Name/{printf $2 " " $3}END{ print ""}' $file; done | sort -k 2 -n -r | head -10
+
+Reconstituer la SWAP
+
+swapoff -a ; swapon -a
+
+Vérifier le taux d'utilisation du disque
+
+iostat -x 1
+
+Vérifier l'état des disques sur un serveur physique
+
+megasasctl
+
+Créer un mot de passe aléatoire
+
+makepasswd
+
+makepasswd --char 12 (12 caractères)
+
+Supprimer les fichiers plus vieux d'un an
+
+find $EMPLACEMENT -type f  -mtime +365 -delete
+
+Vérifier sa configuration JSON (syntaxe)
+
+cat nomdufichier.json | python -m json.tool
+
+Afficher toutes les permissions d'un chemin
+
+namei -om /chemin/à/vérifier
+
+Connaître le nombre de connexions par IP
+
+
+netstat -pan | grep 'tcp' | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
+Connaître le nombre de fichiers sur les 20 derniers jours	find . -type f -mtime +20
+Afficher les informations d'un certificat
+
+openssl x509 -noout -in chemin complet du certificat -text
+
+Vérifier un certificat encodé en DER
+
+openssl x509 -in certificate.der -inform der -text -noout
+
+Convertir un DER en PEM
+
+openssl x509 -in cert.crt -inform der -outform pem -out cert.pem
+
+Convertir pfx en pem
+
+openssl pkcs12 -in client_ssl.pfx -out client_ssl.pem -clcerts
+
+openssl pkcs12 -in client_ssl.pfx -out root.pem -cacerts
+
+openssl rsa -in file.withkey.pem -out file.key
+
+Voir reponse OCSP
+
+openssl s_client -connect www.example.com:443 -status -servername www.example.com
+
+test HTTPS	openssl s_client -connect localhost:443 -state -debug
+Liste des algorithmes disponible	openssl ciphers -v
+
+
+
+
+Créer compte pure-ftp
+
+pure-pw useradd <user> -u <UID> -g <GID> -d <destination>
+
+Supprimer un user pure-ftp
+
+pure-pw userdel <user>
+
+Recharger la configuartion
+
+pure-pw mkdb
+
+Changer le mot de passe d'un compte
+
+pure-pw passwd login
+
+Tester la configuration en local
+
+ftp localhost
+
+
+
+
+Lister les messages en queue
+
+postqueue -p
+
+Supprimer un message en queue
+
+postsuper -d
+
+Supprimer tous les message en queue
+
+postsuper -d ALL
+
+Afficher le contenu d'un message
+
+postcat -q <ID>
+
+Forcer l'envoie des messages en queue
+
+postqueue -f
+
+Afficher le nombre de mails par provider
+
+qshape deferred
+
+
+
+
+Lister les vhosts	rabbitmqctl list_vhosts
+Lister les queues pour un vhost
+
+rabbitmqctl list_queues -p /vhost
+
+Lister les queues en cours (20 premières)
+
+rabbitmqctl list_queues | awk '{ print $2 " " $1}' | sort -nr | head -n 20
+
+
+
+
+Status
+
+curl 'localhost:9200/_cat/health?v' ou curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
+
+Cluster status
+
+http_proxy='' curl -XGET 'http://localhost:9200/_cluster/health?pretty=true&detailed=true'
+
+Recovery status
+
+curl -XGET 'localhost:9200/_cat/recovery?v'
+
+Lister les shards
+
+curl 'localhost:9200/_cat/shards' 2>&1
+
+Fermer un indice
+
+curl -XPOST 'http://localhost:9200/INDICE/_close'
+
+Ouvrir un indice
+
+curl -XPOST 'http://localhost:9200/openvoice/_open'
+
+Lister les snapshots
+
+curl -XGET 'http://localhost:9200/_snapshot/REPO/_all/?pretty=true'
+
+Lister les tâches en cours
+
+curl -XGET 'http://localhost:9200/_cluster/pending_tasks?pretty'
+
+Consulter la configuration d'un index
+
+http_proxy= curl 'http://localhost:9200/<index_name>/_settings?pretty=true'
+
+Lister les "unassigned_shards"
+
+curl -XGET 'http://localhost:9200/_cat/shards?v'
+
+
+
+
+Lister les containers
+
+docker ps -a
+
+Supprimer un container via son ID
+
+docker rm <id>
+
+Liste les images utilisés par les containers
+
+docker images -a
+
+Supprime une image via son ID
+
+docker rmi <id de l'image>
+
+Rentrer dans une image
+
+
+docker run -ti image:tag /bin/bash
+
+
+
+
+Générer un dump à des fins d'analyse
+kill -3 $(pgrep -f tomcat); service tomcat7 restart
+
+Afficher des informations sur une IP
+(limites du sous-réseau, nombre d'hôtes, ...)
+
+ipcalc IP/cidr (ex: 192.168.1.0/24)
+
+Afficher adresse IP publique d'un serveur	unset http_proxy; curl ifconfig.co
+
+Sites utiles:
+
+    http://www.thegeekstuff.com/
+    http://www.commandlinefu.com/commands/browse
+    https://buzut.fr/101-commandes-indispensables-sous-linux/
+    https://easyengine.io/tutorials/nginx/status-page/

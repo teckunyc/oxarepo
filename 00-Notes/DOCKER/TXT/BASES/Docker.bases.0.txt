@@ -1,0 +1,38 @@
+#
+#Infrastructureascode #timetomarket #stack #devops #serverless
+
+INFRASTRUCTURE AS CODE
+
+I/ DOCKER
+- Gestionnaire de containers (env.logique standardisée)
+- Portable (packaging: contient ses propres Libs & dépendances)
+- Trashable (volatile)
+- Versionning
+- Executable sur toutes PF Docker
+- Communautaire
+
+  * docker file
+  * api cli
+  * docker tools
+  * docker pull
+  * docker build
+  * docker run
+  * docker security scanning
+
+II/ CONTAINER
+Enveloppe logique contenant le nécessaire utiles pour "exécuter" une appli.
+
+III/ DOCKERFILE
+Les modifications et ajouts se font successivement en suivant le déroulement du
+Dockerfile, par création de "layers" successifs. Les layers sont incompress-
+-ibles. Chaque étape occupera davantage de poids.
+Une structuration efficace et réfléchie du Dockerfile est indispensable.
+
+IV/ DOCKER-COMPOSE
+- module supplémentaire
+
+V/ DOCKER VOLUMES
+
+VI/ DOCKER NETWORKS
+
+VI/ EXERCICES PRATIQUES

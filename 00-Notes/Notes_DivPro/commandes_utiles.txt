@@ -1,0 +1,21 @@
+# # Procédures
+# # connaitre L'IP d'un alias:
+#  ssh alias@sodium.exosec.local l  nomAlias
+# # se connecter sur le site distant via sodium
+#  ssh -t acc@sodium.exosec.local pom.scapnor
+# # changer le shell d'un utilisateur
+#  ssh -t acc@sodium.exosec.local pom.scapnor
+# # relancer le script
+#  /opt/exosec/backup/backup.sh -B /backups/ -C /etc/backup nomalias
+# # créer un tunnel
+# ssh listen@na -- -p 3389 192.168.8.14:80%caece
+
+# # Interrogation SNMP (les info sont a chercher sur la pom du client)
+
+snmpwalk -c <"lacommunauté"> -v "2c" <-- standard utilisé (il y en à trois)
+# Genrules
+# fw new		| service firewall new		# Génère les fichiers de base 
+# fw gen		| service firewall gen		# Génère les fichiers de conf
+# fw try		| service firewall try		# Applique sans sauvegarder
+# fw save		| service firewall save		# Sauve les règles
+

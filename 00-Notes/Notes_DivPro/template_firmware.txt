@@ -1,0 +1,4 @@
+template firmware
+
+relay "ssh cmd@na -- "
+

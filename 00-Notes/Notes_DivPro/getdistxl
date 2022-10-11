@@ -1,0 +1,9 @@
+#!/bin/bash
+
+BASE_D=$PWD
+_getxl=$HOME/bin/getxl
+
+
+$_getxl -d $@
+
+exit $?

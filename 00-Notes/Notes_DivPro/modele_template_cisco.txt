@@ -1,0 +1,11 @@
+template cisco
+
+relay "ssh -t telnet@na --"
+login    "admin"
+password "CNM7M3BPRA"
+enable   'CNM7M3BPRA'
+
+
+Toutes ces informations sont indispensables:
+cela appelle le template prévu pour cisco, et renseigne automatiquement les éléments liés au client.
+

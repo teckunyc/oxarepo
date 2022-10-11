@@ -1,0 +1,127 @@
+. ^ $ * + ? { } [ ] \ | ( )
+
+
+\d
+    Matches any decimal digit; this is equivalent to the class [0-9].
+\D
+    Matches any non-digit character; this is equivalent to the class [^0-9].
+\s
+    Matches any whitespace character; this is equivalent to the class [ \t\n\r\f\v].
+\S
+    Matches any non-whitespace character; this is equivalent to the class [^ \t\n\r\f\v].
+\w
+    Matches any alphanumeric character; this is equivalent to the class [a-zA-Z0-9_].
+\W
+    Matches any non-alphanumeric character; this is equivalent to the class [^a-zA-Z0-9_].
+
+These sequences can be included inside a character class.
+For example, [\s,.] is a character class that will match any whitespace character, or ',' or '.'.
+
+The final metacharacter in this section is .. It matches anything except a newline character, and there’s an alternate mode (re.DOTALL) where it will match even a newline. '.' is often used where you want to match “any character”.
+
+Pattern 	Matches
+^A 	"A" at the beginning of a line
+A$ 	"A" at the end of a line
+A^ 	"A^" anywhere on a line
+$A 	"$A" anywhere on a line
+^^ 	"^" at the beginning of a line
+$$ 	"$" at the end of a line
+
+Regular Expression 	Matches
+[] 	The characters "[]"
+[0] 	The character "0"
+[0-9] 	Any number
+[^0-9] 	Any character other than a number
+[-0-9] 	Any number or a "-"
+[0-9-] 	Any number or a "-"
+[^-0-9] 	Any character except a number or a "-"
+[]0-9] 	Any number or a "]"
+[0-9]] 	Any number followed by a "]"
+[0-9-z] 	Any number,
+	or any character between "9" and "z".
+[0-9\-a\]] 	Any number, or
+	a "-", a "a", or a "]"
+
+Regular Expression 	Matches
+_
+* 	Any line with an asterisk
+\* 	Any line with an asterisk
+\\ 	Any line with a backslash
+^* 	Any line starting with an asterisk
+^A* 	Any line
+^A\* 	Any line starting with an "A*"
+^AA* 	Any line if it starts with one "A"
+^AA*B 	Any line with one or more "A"'s followed by a "B"
+^A\{4,8\}B 	Any line starting with 4, 5, 6, 7 or 8 "A"'s
+	followed by a "B"
+^A\{4,\}B 	Any line starting with 4 or more "A"'s
+	followed by a "B"
+^A\{4\}B 	Any line starting with "AAAAB"
+\{4,8\} 	Any line with "{4,8}"
+A{4,8} 	Any line with "A{4,8}"
+
+Regular Expression 	Class 	Type 	Meaning
+_
+. 	all 	Character Set 	A single character (except newline)
+^ 	all 	Anchor 	Beginning of line
+$ 	all 	Anchor 	End of line
+[...] 	all 	Character Set 	Range of characters
+* 	all 	Modifier 	zero or more duplicates
+\< 	Basic 	Anchor 	Beginning of word
+\> 	Basic 	Anchor 	End of word
+\(..\) 	Basic 	Backreference 	Remembers pattern
+\1..\9 	Basic 	Reference 	Recalls pattern
+_+ 	Extended 	Modifier 	One or more duplicates
+? 	Extended 	Modifier 	Zero or one duplicate
+\{M,N\} 	Extended 	Modifier 	M to N Duplicates
+(...|...) 	Extended 	Anchor 	Shows alteration
+_
+\(...\|...\) 	EMACS 	Anchor 	Shows alteration
+\w 	EMACS 	Character set 	Matches a letter in a word
+\W 	EMACS 	Character set 	Opposite of \w
+
+
+Character Group 	Meaning
+[:alnum:] 	Alphanumeric
+[:cntrl:] 	Control Character
+[:lower:] 	Lower case character
+[:space:] 	Whitespace
+[:alpha:] 	Alphabetic
+[:digit:] 	Digit
+[:print:] 	Printable character
+[:upper:] 	Upper Case Character
+[:blank:] 	whitespace, tabs, etc.
+[:graph:] 	Printable and visible characters
+[:punct:] 	Punctuation
+[:xdigit:] 	Extended Digit
+
+
+Regular Expression
+Class 	Type 	Meaning
+\t 	Character Set 	tab
+\n 	Character Set 	newline
+\r 	Character Set 	return
+\f 	Character Set 	form
+\a 	Character Set 	alarm
+\e 	Character Set 	escape
+\033 	Character Set 	octal
+\x1B 	Character Set 	hex
+\c[ 	Character Set 	control
+\l 	Character Set 	lowercase
+\u 	Character Set 	uppercase
+\L 	Character Set 	lowercase
+\U 	Character Set 	uppercase
+\E 	Character Set 	end
+\Q 	Character Set 	quote
+\w 	Character Set 	Match a "word" character
+\W 	Character Set 	Match a non-word character
+\s 	Character Set 	Match a whitespace character
+\S 	Character Set 	Match a non-whitespace character
+\d 	Character Set 	Match a digit character
+\D 	Character Set 	Match a non-digit character
+\b 	Anchor 	Match a word boundary
+\B 	Anchor 	Match a non-(word boundary)
+\A 	Anchor 	Match only at beginning of string
+\Z 	Anchor 	Match only at EOS, or before newline
+\z 	Anchor 	Match only at end of string
+\G 	Anchor 	Match only where previous m//g left off

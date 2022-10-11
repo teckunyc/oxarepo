@@ -1,0 +1,24 @@
+Formation Tools
+[oxa-toolsbox]
+
+- Centreon
+- gitlab
+https://intranet.oxalide.net --> vos applications
+https://gitlab.oxalid.net --> dépots clients, cookbook etc...
+- infrana
+https://infrana.oxalide.net
+- OCS inventory
+https://inventaire.oxalide.net
+-Observium
+https://obs.oxalide.net
+bastion manager
+https://bastion-manager.oxalide.net
+gestion des LVS et règles FW
+https://gitweb-lvs.oxalide.net
+- SandBox AWS
+- Bigshow (AWS pour les clients)
+https://bigshow.oxalide.net
+- weather map oxalide
+https://obs.oxalide.net/weathermap/pub/oxalide-prod.html
+- jenkins
+http://jenkins.oxalide.net

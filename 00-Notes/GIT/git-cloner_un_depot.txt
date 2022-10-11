@@ -1,0 +1,21 @@
+- CLONER UN DÉPÔT EXISTANT
+Si vous souhaitez obtenir une copie d'un dépôt Git existant
+  "$ git clone"
+Git reçoit une copie de quasiment toutes les données stockées sur le repo.
+
+Vous clonez un dépôt avec "$ git clone [url]".
+Par exemple, si vous voulez cloner la bibliothèque Git Ruby appelée Grit:
+
+  $ git clone git://github.com/schacon/grit.git
+  $ git clone git://github.com/schacon/grit.git mongrit
+  Cette commande réalise la même chose que la précédente, mais le répertoire
+  cible s'appelle mongrit.
+
+Ceci crée un répertoire nommé grit, initialise un répertoire ".git" et,
+télécharge la dernière version des fichiers trackés par Git.
+Si vous examinez le nouveau répertoire grit, vous y verrez les fichiers
+du projet, prêts à être modifiés ou utilisés.
+
+Git utilise différents protocoles de transfert que vous pouvez utiliser.
+L'exemple précédent utilise le protocole git://, mais vous pouvez aussi avoir:
+http(s):// ou utilisateur@serveur:/chemin.git, qui utilise le protocole SSH.

@@ -1,0 +1,353 @@
+.bashrc
+
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+# don't put duplicate lines in the history. See bash(1) for more options
+# ... or force ignoredups and ignorespace
+HISTCONTROL=ignoredups:ignorespace
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# Prompt perso
+
+GRAY="\[\e[0;33m\]"
+CYAN="\[\e[0;36m\]"
+LIGHT_CYAN="\[\e[01;36m\]"
+RED="\[\e[1;31m\]"
+SQUARE='\342\226\210'
+ 
+if [ "$UID" -eq "0" ]  # Si root 
+then
+ PS1="\n$RED$SQUARE $CYAN\u @ $LIGHT_CYAN\w\n\`if [ \$? = "0" ]; then echo '${LIGHT_CYAN}'; else echo '${RED}'; fi\`$SQUARE $CYAN\t $GRAY#\!$LIGHT_CYAN $ \[\033[0;39m\]"
+else
+ PS1="\n$LIGHT_CYAN$SQUARE $CYAN\u @ $LIGHT_CYAN\w\n\`if [ \$? = "0" ]; then echo '${LIGHT_CYAN}'; else echo '${RED}'; fi\`$SQUARE $CYAN\t $GRAY#\!$LIGHT_CYAN $ \[\033[0;39m\]"
+fi
+
+# enable color support of ls and also add handy aliases
+
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+#########################
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+# don't put duplicate lines in the history. See bash(1) for more options
+# ... or force ignoredups and ignorespace
+HISTCONTROL=ignoredups:ignorespace
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# Prompt perso
+
+GRAY="\[\e[0;33m\]"
+CYAN="\[\e[0;36m\]"
+LIGHT_CYAN="\[\e[01;36m\]"
+RED="\[\e[1;31m\]"
+SQUARE='\342\226\210'
+ 
+if [ "$UID" -eq "0" ]  # Si root 
+then
+    PS1="\n$RED$SQUARE $CYAN\u @ $LIGHT_CYAN\w\n\`if [ \$? = "0" ]; then echo '${LIGHT_CYAN}'; else echo '${RED}'; fi\`$SQUARE $CYAN\t $GRAY#\!$LIGHT_CYAN $ \[\033[0;39m\]"
+else
+    PS1="\n$LIGHT_CYAN$SQUARE $CYAN\u @ $LIGHT_CYAN\w\n\`if [ \$? = "0" ]; then echo '${LIGHT_CYAN}'; else echo '${RED}'; fi\`$SQUARE $CYAN\t $GRAY#\!$LIGHT_CYAN $ \[\033[0;39m\]"
+fi
+
+# enable color support of ls and also add handy aliases
+
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# Aptitude - Dpkg
+alias ins='sudo aptitude install -y'
+alias maj='sudo aptitude update; sudo aptitude safe-upgrade'
+alias pol='apt-cache policy'
+alias show='apt-cache show'
+alias cherche='apt-cache search'
+alias vire='sudo aptitude remove --purge'
+alias menage="sudo aptitude purge '(~c|~g)' --purge-unused"
+alias dep='apt-rdepends'
+alias ListePaquetsInstalles='dpkg --get-selections | grep -v deinstall > ListePaquetsInstalles'
+alias pkgr='dpkg -l|grep';           # liste des paquets dont le nom contient $1
+alias pkl='dpkg -l';                 # pour voir l'etat local du paquet $1
+alias pkL='dpkg -L';                 # la liste des fichiers du paquet $1
+
+# Places
+alias bu='cd /home/${USER}/Bureau/'
+alias alba='cd /media/ALBATOR && ls -rtl'
+alias wd='cd /media/WD && ls -rtl'
+alias pnoy='var=$(TZ='Asia/Manila' date +%Hh%M); echo "Oras sa Filipinas ? => ${var}"'
+alias tokyo='var=$(TZ='Asia/Tokyo' date +%Hh%M); echo "A Tokyo, il est ${var}"'
+alias bang='var=$(TZ='Asia/Bangkok' date +%Hh%M); echo "A Bangkok, il est ${var}"'
+alias sc='cd ~/Scripts'
+alias rezo='nmap -sP 192.168.0.10-20'
+alias thu='thunar .'
+
+# Misc
+alias h='cd ~'
+alias c='clear;ls -rtl'
+alias lx='ls -lXB'                   # tri par extensions
+alias toptenh="history | awk '{print \$4}' | sort | uniq -c | sort -rn | head -10"
+alias lognotifs="vi ~/.cache/notify-osd.log"
+alias listextensions="find . -type f | awk -F'.' '{print $NF}' | sort| uniq -c | sort -g"
+alias jour='var=$(/usr/bin/cal); echo "${var/$(date +%-d)/$(echo -e "\033[1;31m$(date +%-d)\033[0m")}"'
+alias mount='mount | column -t'
+alias eurom='shuf -i 1-50 -n 5 | sort -n | xargs && shuf -i 1-11 -n 2 | sort -n | xargs'
+alias vlctv='vlc http://mafreebox.freebox.fr/freeboxtv/playlist.m3u &'
+alias lsscri='ls -rtl /home/${USER}/Scripts'
+alias psg='ps -ef | grep -i'
+alias randomcmd='ls /usr/bin | shuf -n 1'
+alias cpbashrc='cp ~/.bashrc ~/Bureau/dotbashrc'
+alias shred='shred -n 35 -z -u -v'
+alias playlist='ls -R > playslist.m3u'
+alias dirs='ls -al|grep "^d"'
+alias dots='ls .[a-zA-Z0-9_]*'
+alias shot='scrot -d 5 -b -t 20 shot_`date '+%F'`.png'   # man scrot
+alias ripped='rip(){ mv $1 `echo $1 | sed 's/.avi$/[ripped.by.Poulpoul].avi/'`; }; rip'
+alias cpsave='cpsave(){ cp $1 $(echo $1 | sed 's/$/.save/'); }; cpsave'
+alias cpsave2='cpsave2(){ cp $1 $(echo $1 | sed "s/$/.save_$(date "+%d%m%Y")/"); }; cpsave2'
+alias killcon='killall -SIGUSR1 conky'
+alias thumbs='find ~ -type f -iname "thumbs.db" -print0 | xargs -0 -r rm -v'
+alias derf='vi $(ls -rt1 | tail-1)'
+alias derr='cd $(ls -rt1 | tail-1)'
+alias tree="find . | sed 's/[^/]*\//|   /g;s/| *\([^| ]\)/+--- \1/'"
+alias path='echo $PATH | tr ":" "\n"'
+alias md='mkdir -p'
+alias agr='alias | grep -i'
+alias 10plusgros='du -s * | sort -rn | head -10' # voir aussi l'excellent ncdu
+alias chx='chmod +x $1'
+alias hdd='sudo smartctl -a -d ata /dev/sda'
+alias st='scrot -t 10'
+alias st3='scrot -cd 3 -t 7'
+alias st6='scrot -cd 6 -t 7'
+alias feh='feh -q -d -g 1365x768'
+alias trk='mocp -Q %title >> ~/OUT.out 2> /dev/null'
+alias v2='cd /media/ALBATOR/IT/V2/'
+
+# Pacman
+alias pup='sudo pacman-color -Syu'
+alias pacs='sudo pacman-color -S'
+alias pacr='sudo pacman-color -Rs'
+alias pacu='sudo pacman-color -U'
+alias pacral='sudo pacman-color -Rsn'
+alias pacor='pacman-color -Qm'
+alias pacf='pacman-color -Ss'
+alias paq='pacman -Q | grep -i $1'
+alias paqi='pacman-color -Qi'
+alias paco='pacman-color -Qo'	#Fichier appartient paquet
+alias mefi='makepkg -efi --noconfirm'
+alias pacex='pacman-color -Qte'	#Paquet installés explicitement
+alias aurup='package-query -AQm'
+alias aurf='package-query -As --sort w'
+
+# Logs
+alias logd='tail -f ~/.dwmlog | ccze -A'
+alias logx='tail -n 30 -f /var/log/Xorg.0.log | ccze -A'
+alias loger='tail -n 30 -f /var/log/errors.log | ccze -A'
+
+# WM
+alias open='cd ~/.config/openbox && ls -rtl'
+alias or='openbox --reconfigure'
+alias RestoreTDB='gconftool-2 --load=/home/${USER}/ma_conf.xml'
+alias SaveTDB='gconftool-2 --dump=/home/${USER}/ma_conf.xml'
+alias clickdroit='cd ~/.gnome2/nautilus-scripts'
+
+# Power
+alias reboot='sudo shutdown -r now'
+alias shut='sudo shutdown -h now'
+
+###########
+# Fonctions
+###########
+
+ccd() # cd dans un répertoire puis ls -rtl
+{
+ cd $@ && ls -rtl
+}
+
+scpt() # création de script (scpt nom_script)
+{
+cat > $1 << EOF
+#!/bin/bash
+#---------------------------------------------------
+# Nom du script......: 
+# Auteur.............: 
+# Date de creation...: 
+# Objet..............:
+# Syntaxe............: 
+# Commentaire(s).....:
+# Modification(s)....: 
+#---------------------------------------------------
+# Fonctions
+
+# Renseignement des variables
+
+# Début de la procédure
+EOF
+vi +15 $1 && chmod +x $1
+}
+
+# Memo
+memawk()
+{
+cat << EOF
+AWK MEMO
+--------
+BEGIN { Actions}
+{ACTION} # Action for everyline in a file
+END { Actions }
+--------
+EOF
+}
+
+# Extraction à la main
+extract() 
+{
+ if [ -f $1 ] 
+ then
+  case $1 in
+   *.tar.bz2)   tar xvjf $1    ;;
+   *.tar.gz)    tar xvzf $1    ;;
+   *.tar.xz)    tar xvJf $1    ;;
+   *.bz2)       bunzip2 $1     ;;
+   *.rar)       unrar x $1     ;;
+   *.gz)        gunzip $1      ;;
+   *.tar)       tar xvf $1     ;;
+   *.tbz2)      tar xvjf $1    ;;
+   *.tgz)       tar xvzf $1    ;;
+   *.zip)       unzip $1       ;;
+   *.Z)         uncompress $1  ;;
+   *.7z)        7z x $1        ;;
+   *.xz)        unxz $1        ;;
+   *.exe)       cabextract $1  ;;
+   *)           echo "'$1': format de compression non reconnu" ;;
+   esac
+ else
+  echo "'$1' n'est pas un fichier valide"
+ fi
+}
+
+# fini les espaces dans les noms de fichiers/répertoires
+nospace()
+{
+ for i in *
+ do
+  mv "$i" "`echo $i | tr " " "_"`"
+ done
+}
+
+# idem que le précédent mais pour un fichier
+Space1()
+{
+ mv "$1" "`echo $1 | tr " " "_"`"
+}
+
+# liste les fichiers/répertoires vides
+vides()
+{ 
+ find $1 -empty
+}
+
+dureefilms()
+{
+ clear
+ for i in *.avi *.mp4 *.ogv *.mkv *.flv
+ do 
+  echo $i [`ffmpeg -i "$i" 2>&1 | grep "Duration:" | awk 'FS=":" {print $1 $2}' | sed 's/Duration://;s/....$//'`]
+ done
+}
+
+myip()
+{ 
+ wget -q -O - checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//'
+}
+
+dtc()
+{ 
+ url=http://danstonchat.com/random.html?toto=`date +%N` 
+ lynx --dump --display_charset=utf8 $url 2>&1 \
+  | awk '$1~"#" && $0!~"RSS" { getline; while ($1!~"#") { print $0; getline;}; exit}'
+}
+
+flactomp3() # necessite paquets flac et lame
+{
+ for file in *.flac; do flac -cd "$file" | lame -h - "${file%.flac}.mp3"; done
+}
+
+Trouve()
+{
+ if [ $# -eq 0 ]
+ then
+#echo "Usage: $0 mot" => Usage: -bash mot
+ echo "Usage: Trouve mot"
+ return 69 
+ else
+  for i in "$@"
+  do
+   find -iname "*$i*" | grep -i $i
+  done
+ fi
+}
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
+set -o vi
+export PATH=$PATH:/home/${USER}/Scripts
+export HISTTIMEFORMAT="[%d-%m-%Y] %H:%M $ "
+export HISTCONTROL="ignoreboth"

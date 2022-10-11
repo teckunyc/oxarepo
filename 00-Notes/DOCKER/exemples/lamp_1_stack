@@ -1,0 +1,15 @@
+INSTALLER DOCKER=
+  $ sudo apt install docker.io
+  $ sudo usermod -aG docker $USER
+  $ sudo apt install docker-compose
+
+CRÉER SON ENVIRONNEMENT DE DÉVELOPPEMENT=
+  $ sudo mkdir -p /mnt/docker/shares/web/html
+  $ sudo mkdir -p /mnt/docker/shares/mysql
+  $ sudo chmod -R 777 /mnt/docker/shares/
+
+DOCKER-COMPOSE
+  $ sudo docker-compose [...]
+
+DOCKER CDE=
+/home/mike/Documents/github/00-Notes/DOCKER/TXT/BASES/Docker-compose.yml

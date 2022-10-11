@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# APACHE # CDE
+## Vérifier la configuration
+apache2ctl -t
+##  Lister les vhots actifs
+apache2ctl -S
+## Reload de la configuration
+apache2ctl -k graceful
+## Lister les IP effectuant le plus de HIT
+tail -n 100000 access.log | awk '{print $1}' | sort | uniq -c | sort | tail -10
+## Lister les IP les plus présentes par tranche horaire
+grep "20/Jul/2016:20:" access.log | awk '{print $1}' | sort -n | uniq -c | sort | tail -n 10
+## Obtenir un server-status d'apache
+## !! Pensez à faire un netstat -lntp | grep apache
+http_proxy= lynx http://localhost/server-status
+http_proxy= lynx 0:8080/server-status (si apache écoute sur le port 8080)
+## Lister les modules Actifs
+apache2ctl -T -D DUMP_MODULES
+## Voir module compilé
+apache2ctl -l
+
+## Tester une URL (http/https)
+unset http_proxy ou unset https_proxy
+curl -IH "host: <vhost>" localhost/<url>
+curl -IH --insecure "host: <vhost>" https://localhost:443/<url>
+curl <url> | lynx --stdin OU curl <url> | lynx --stdin --dump
+
+
+... Obsolete rechercher méthode digest
+## création d'un htaccess
+Voici la configuration recommandée:
+#--->
+AuthName "Acces Restreint"
+AuthType Basic
+AuthUserFile "/path/to/the/htpasswd/file"
+Require valid-user
+#<---
+
+Pour créer le fichier htpasswd:
+
+# htpasswd -c -m /path/to/the/htpasswd/file username
+Note:
+
+N'utilisez pas l'option -c si le fichier existe déjà
+Ne créez pas le fichier htpasswd dans l’arborescence Web (accessible via HTTP/hors du DocumentRoot)

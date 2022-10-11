@@ -1,0 +1,33 @@
+OBJECTIFS:
+- Mettre en place quatre briques permettant d'héberger un site dynamique,
+  alimenté par une bdd MySql.
+- Containers utilisés: nginx, php, phpmyadmin, mysql-server
+--------------------------------------------------------------------------------
+ÉTAPES:
+
+1/ Récupérer les images-docker correspondantes au projet, sur le docker-hub.
+
+(NGINX)
+  $ docker pull nginx
+(PHP)
+  $ docker pull jprjr/php-fpm
+(MYSQL)
+  $ docker pull mysql/mysql-server
+  # docker run --name my-container-name -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql/mysql-server:tag
+
+(PHPMYADMIN)
+  $ docker pull corbinu/docker-phpmyadmin
+
+2/ Dockeriser les containers
+
+(NGINX) [tag:srvWeb]
+$ docker run --name srvWeb -v /mnt/docker/shares/web/html/:/usr/share/nginx/html:ro -p 80:80 -d nginx
+
+(PHP) [tag:srvPhp]
+$ docker run --name srvPhp -p 9000:9000 -d jprjr/php-fpm
+
+(MYSQL) [tag:srvMysql]
+
+(PHPMYADMIN) [tag:adminSql]
+
+3/ Créer les liens (links) entre les différents containers

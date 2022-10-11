@@ -1,0 +1,218 @@
+====== NOM CLIENT ======
+
+NOM DU CLIENT
+
+
+
+
+===== Données clés de l'infrastructure =====
+
+==== SCHEMA ====
+
+code couleur : \\
+LAN = BLEU \\
+WAN = NOIR \\ 
+DMZ = ROUGE \\
+VIP = VERT \\
+MPLS = ORANGE \\
+
+
+==== Réseaux locaux ====
+
+^ Identifiant ^ VLAN-ID ^ Réseau         ^ Masque        ^ Passerelle ^
+| LAN         | 10      | 10.208.134.0   | 255.255.255.0 | 10.208.134.1 (hsrp:routeur axa) |
+| DMZ-IN      |         | 192.168.1.0    | 255.255.255.0 | 192.168.1.1 (vip:firewall) |
+| DMZ-OUT     |         | 192.168.3.0    | 255.255.255.0 | 192.168.3.1 (vip:firewall) |
+| DMZ-VPN     |         | 192.168.2.0    | 255.255.255.0 | 192.168.2.1 (vip:relay-out) |
+| DMZ-ADM     |         | 192.168.4.0    | 255.255.255.0 | 192.168.4.1 (vip:firewall) |
+| DMZ-WAN     |         | 192.168.5.0    | 255.255.255.0 | 192.168.5.1 (vip:firewall) |
+| DMZ-WEB     |         | 192.168.6.0    | 255.255.255.0 | 192.168.6.1 (vip:firewall) |
+
+==== Interconnexions ====
+
+^ Description               ^ Débit ^ Utilisation ^
+| Internet via CELESTE      |       |             |
+| Internet via NERIM        |       |             |
+
+==== Services publiés ====
+
+^ Service                     ^ Adresses IP ^
+| NS / uniprevoyance.fr       | ns1.amen.fr, ns2.amen.fr |
+| MX / uniprevoyance.fr       | mx1.uniprevoyance.fr(213.215.7.162), mx2.uniprevoyance.fr ( |
+| mx1.uniprevoyance.fr        | 213.215.7.162 |
+| mx2.uniprevoyance.fr        | 94.228.182.234 |
+| WEB / uniprevoyance.fr      | 94.228.182.233 |
+| www.uniprevoyance.fr        | 94.228.182.233 |
+
+===== Briques techniques et fonctionnelles =====
+
+==== Firewall ====
+
+Le firewall a 3 rôles :
+  * le routage, il permet de véhiculer un paquet d'un réseau IP vers un autre réseau IP
+  * le filtrage, il permet d'accepter ou de bloquer, il permet de loguer les échanges IP qui sont réalisés en passant par lui
+  * la translation d'adresse, en l'accédant, le firewall est en mesure de modifier certains attributs des connexions comme l'adresse source, l'adresse destination, les ports sources et les ports destinations
+
+^ Fiche technique sur plateforme UTM EXOSEC ^^
+^ Démarrage du service | ''/etc/init.d/firewall start'' |
+^ Arrêt du service | ''/etc/init.d/firewall stop'' |
+^ Etat du service | ''/etc/init.d/firewall status'' |
+^ Configuration | ''/etc/firewall'' ([[genrules]]) |
+^ Logs | ''/var/log/firewall'' |
+
+
+==== OpenVPN ====
+
+OpenVPN est une solution de tunnel qui se base sur une connexion non normalisée utilisant le SSL. Elle est à différentier des tunnels [[IPSEC]]. La solution consiste à établir une session TCP ou UDP entre 2 extrémités et d'encapsuler le trafic souhaité dans cette session. Les équipements traversés par la session ne peuvent décoder le flux ainsi chiffré. Cette connexion est établie grâce à des interfaces virtuelles (TUN ou TAP) sur lesquels sont définies des adresses IP et vers lesquelles sont routés des réseaux conformément à la table de routage.
+
+^ Fiche technique sur plateforme UTM EXOSEC ^^
+^ Logiciel | OpenVPN |
+^ Site Web | http://www.openvpn.net/ |
+^ Licence | GPL | 
+^ Démarrage du service | ''/etc/init.d/openvpn start'' |
+^ Arrêt du service | ''/etc/init.d/openvpn stop'' |
+^ Etat du service | ''/etc/init.d/openvpn status'' |
+^ Configuration | ''/etc/config.rc'' \\ ''/etc/openvpn/'' |
+^ Logs | ''/var/log/messages'' |
+
+
+
+==== IPSEC ====
+
+IPSEC est une norme d'établissement de tunnel sécurisé à travers des réseaux IP ([[http://tools.ietf.org/html/rfc4301|RFC-4301]]). Ce protocole est disponible sur les équipements informatiques habituels de type firewalls et serveurs (windows, linux, macos). C'est un protocole assez contraignant et obscure du fait du chiffrement de la plupart des informations. 
+
+^ Fiche technique sur plateforme UTM EXOSEC ^^
+^ Logiciel | OpenSwan |
+^ Site Web | http://www.openswan.org/ |
+^ Licence | GPL |
+^ Démarrage du service | /etc/init.d/ipsec start |
+^ Arrêt du service | /etc/init.d/ipsec stop |
+^ Etat du service | /etc/init.d/ipsec status |
+^ Configuration | /etc/config.rc |
+^ Logs 	/var/log/messages |
+
+
+
+
+==== Proxy Web ====
+
+Le proxy web est une brique applicative qui va permettre de valider les accès des utilisateurs et faire des contrôles protocolaires sur le flux Web. On adjoint habituellement une fonctionnalité de cache à ce trafic.
+
+Le proxy va permettre d'authentifier un utilisateur par rapport à une base locale ou un annuaire (AD).
+
+Il va permettre de faire un certain nombre de contrôle liés aux informations dans le flux (source, url, horaires, ...) grâce à un système d'access-list.
+
+Des règles de mise en cache peuvent être établies afin d’accélérer les échanges.
+
+^ Fiche technique sur plateforme UTM EXOSEC ^^
+^ Logiciel | SQUID |
+^ Site Web | http://www.squid-cache.org/ |
+^ Licence | GPL | 
+^ Démarrage du service | ''/etc/init.d/squid start'' |
+^ Arrêt du service | ''/etc/init.d/squid stop'' |
+^ Etat du service | ''/etc/init.d/squid status'' |
+^ Configuration | ''/etc/config.rc'' \\ ''/etc/squid/'' |
+^ Logs | ''/var/log/messages'' |
+
+
+
+==== Relay SMTP ====
+
+Le relay SMTP est un système qui permet de prendre en charge un message pour le transmettre. Au cours de cette prise en charge, plusieurs contrôles peuvent être réalisés sur le contenu des échanges (virus, spams, ...). Je distingue la fonction de relay SMTP à celle de proxy SMTP dans le sens où dans le cadre d'un relay, le message et la responsabilité de son transfert sont délégués. Un proxy SMTP ne peut fonctionner comme un relais car un serveur envoie un seul message à un relay pour plusieurs destinataires charge au relais de relayer à un relais ou de délivrer un chacun des destinataires ce qui implique d'être en mesure de conserver le message tant que chaque destinataire n'a pas reçu le message.
+
+^ Fiche technique sur plateforme UTM EXOSEC ^^
+^ Logiciel | Postfix |
+^ Site Web | http://www.postfix.org/ |
+^ Licence | GPL | 
+^ Démarrage du service | ''/etc/init.d/postfix start'' |
+^ Arrêt du service | ''/etc/init.d/postfix stop'' |
+^ Etat du service | ''/etc/init.d/postfix status'' |
+^ Configuration | ''/etc/config.rc'' \\ ''/etc/postfix/'' |
+^ Logs | ''/var/log/messages'' |
+
+
+
+==== Proxy DNS ====
+
+Le proxy (cache) DNS va prendre en charge les requêtes DNS afin de les relayer sur Internet et retourner le résultat aux machines à l'origine des demandes. Afin d'accélérer les traitements, les réponses vont être mise en cache pendant un certain temps. 
+Un proxy cache va également pouvoir redéfinir certaines entrées lorsque cela est nécessaire.
+
+^ Fiche technique sur plateforme UTM EXOSEC ^^
+^ Logiciel | dnsmasq |
+^ Site Web | http://www.dnsmasq.org/ |
+^ Licence | GPL | 
+^ Démarrage du service | ''/etc/init.d/dnsmasq start'' |
+^ Arrêt du service | ''/etc/init.d/dnsmasq stop'' |
+^ Etat du service | ''/etc/init.d/dnsmasq status'' |
+^ Configuration | ''/etc/dnsmasq.conf'' |
+^ Logs | ''/var/log/messages'' |
+
+
+==== Serveur NTP ====
+
+Le service NTP permet de conserver et délivrer une heure la plus juste possible. Il se synchronise en continue sur des sources externes afin de limiter le décalage matériel. Les machines du réseau peuvent s'appuyer sur ce serveur pour définir leur propre horloge interne.
+
+^ Fiche technique sur plateforme UTM EXOSEC ^^
+^ Logiciel | NTP |
+^ Site Web | http://www.ntp.org/ |
+^ Licence |  | 
+^ Démarrage du service | ''/etc/init.d/ntp start'' |
+^ Arrêt du service | ''/etc/init.d/ntp stop'' |
+^ Etat du service | ''/etc/init.d/ntp status'' |
+^ Configuration | ''/etc/config.rc'' \\ ''/etc/ntp.conf'' |
+^ Logs | ''/var/log/messages'' |
+
+
+==== Reverse-proxy ====
+
+Le reverse-proxy joue un rôle inverse à celui d'un proxy mais finalement les fonctionnalités sont les mêmes. Un reverse-proxy va être proche des serveurs web afin de les sécuriser et leur éviter de la charge inutile en traitant des problématiques de cache, de SSL, d'analyse protocolaire.
+
+^ Fiche technique sur plateforme UTM EXOSEC ^^
+^ Logiciel | Apache |
+^ Site Web | http://www.apache.org/ |
+^ Licence |  | 
+^ Démarrage du service | ''/etc/init.d/apache start'' |
+^ Arrêt du service | ''/etc/init.d/apache stop'' |
+^ Etat du service | ''/etc/init.d/apache status'' |
+^ Configuration | ''/etc/config.rc'' \\ ''/etc/httpd/'' |
+^ Logs | ''/var/log/messages'' |
+
+
+==== Landefender ====
+
+==== Gwbalance ====
+
+==== Supervision ====
+
+===== HOSTS / FONCTIONS =====
+
+==rin1.unip==
+<code>Acces via 192.168.1.7 (eth0)
+Hostname : relay-in1
+Type : UTM
+HA par keepalived
+Services :
+squid / clamav / pluto / openvpn
+</code>
+
+
+====== SPÉCIFIQUE ======
+==== VPN IPsec / OpenVPN / SSL ====
+
+Il y a 4 types d'accès chiffrés :
+  * tunnel IPSEC géré par ''ssl.unip''
+  * tunnel OpenVPN géré par ''ssl.unip''
+  * reverse-proxy SSL pour le service sec.uniprevoyance.com et webmail.uniprevoyance.fr sur ''rin.unip'' géré par l'application SQUID (''/etc/squid/squid.conf'') et non APACHE.
+  * WEBVPN (portail) géré par l'ASA pour l'accès aux applications TSE
+
+
+
+==== TSWEB / WEBVPN / TSE ====
+Il y a un script pour gérer la synchro entre AD et l'ASA.
+
+Sur ulog : 
+   /opt/bin/portal/update
+===== Documents =====
+
+  - [[Charte informatique]]
+  - [[./remote/index|extrait du WIKI de uniprevoyance]]

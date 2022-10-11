@@ -1,0 +1,353 @@
+## l'ip du serveur en écoute sert de servername par défaut=
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    ServerName 132.5.210.31
+    ServerAlias 132.5.210.31
+    DocumentRoot /var/www/default
+    <Directory />
+        Options FollowSymLinks
+        AllowOverride None
+    </Directory>
+    <Directory /var/www/default/>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.default.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/access.default.log combined
+</VirtualHost>
+##
+<VirtualHost *:443>
+    ServerAdmin webmaster@localhost
+        ServerName 132.5.210.31
+        ServerAlias 132.5.210.31
+        SSLEngine On
+        SSLCertificateKeyFile /etc/apache2/serverKeys/132.5.210.31/132.5.210.31.key
+        SSLCertificateFile /etc/apache2/serverKeys/132.5.210.31/132.5.210.31.crt
+        SSLCACertificateFile /etc/apache2/serverKeys/132.5.210.31/132.5.210.31.crt
+    DocumentRoot /var/www/default
+    <Directory />
+        Options FollowSymLinks
+        AllowOverride None
+    </Directory>
+    <Directory /var/www/default/>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.ssl.default.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/access.default.log combined
+</VirtualHost>
+
+## www.local001.tld
+ <VirtualHost *:80>
+    ServerAdmin contact@local001.tld
+    ServerName www.local001.tld
+    ServerAlias www.local001.tld
+
+DocumentRoot /var/www/local001.tld/www
+    <Directory />
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    <Directory /var/www/local001.tld/www>
+        # Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+    <Directory "/usr/lib/cgi-bin">
+        AllowOverride None
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.www.local001.tld.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/access.www.local001.tld.log combined
+
+</VirtualHost>
+
+## forum.local001.tld
+ <VirtualHost *:80>
+    ServerAdmin contact@local001.tld
+    ServerName forum.local001.tld
+    ServerAlias forum.local001.tld
+
+DocumentRoot /var/www/local001.tld/forum
+    <Directory />
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+    <Directory /var/www/local001.tld/forum>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+    <Directory "/usr/lib/cgi-bin">
+        AllowOverride None
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.forum.local001.tld.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/access.forum.local001.tld.log combined
+
+</VirtualHost>
+#
+## MEMES VHOSTS AVEC SSL
+## https://www.local001.tld
+ <VirtualHost *:443>
+    ServerAdmin contact@local001.tld
+    ServerName www.local001.tld
+    ServerAlias www.local001.tld
+        SSLEngine On
+        SSLCertificateKeyFile /etc/apache2/serverKeys/www.local001.tld/www.local001.tld.key
+        SSLCertificateFile /etc/apache2/serverKeys/www.local001.tld/www.local001.tld.crt
+        SSLCACertificateFile /etc/apache2/serverKeys/www.local001.tld/www.local001.tld.crt
+DocumentRoot /var/www/local001.tld/www
+    <Directory />
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+    <Directory /var/www/local001.tld/www>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+    <Directory "/usr/lib/cgi-bin">
+        AllowOverride None
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.www.ssl.local001.tld.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/access.www.ssl.local001.tld.log combined
+
+</VirtualHost>
+
+## https://forum.local001.tld
+ <VirtualHost *:443>
+    ServerAdmin contact@local001.tld
+    ServerName forum.local001.tld
+    ServerAlias forum.local001.tld
+        SSLEngine On
+        SSLCertificateKeyFile /etc/apache2/serverKeys/forum.local001.tld/forum.local001.tld.key
+        SSLCertificateFile /etc/apache2/serverKeys/forum.local001.tld/forum.local001.tld.crt
+        SSLCACertificateFile /etc/apache2/serverKeys/forum.local001.tld/forum.local001.tld.crt
+DocumentRoot /var/www/local001.tld/forum
+    <Directory />
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+    <Directory /var/www/local001.tld/forum>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+    <Directory "/usr/lib/cgi-bin">
+        AllowOverride None
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.forum.ssl.local001.tld.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/access.forum.ssl.local001.tld.log combined
+
+</VirtualHost>
+
+local002.tld:
+
+ <VirtualHost *:80>
+    ServerAdmin contact@local002.tld
+    ServerName www.local002.tld
+    ServerAlias www.local002.tld
+
+DocumentRoot /var/www/local002.tld/www
+    <Directory />
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+    <Directory /var/www/local002.tld/www>
+        # Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+    <Directory "/usr/lib/cgi-bin">
+        AllowOverride None
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.www.local002.tld.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/access.www.local002.tld.log combined
+
+</VirtualHost>
+
+
+ <VirtualHost *:80>
+    ServerAdmin contact@local002.tld
+    ServerName forum.local002.tld
+    ServerAlias forum.local002.tld
+
+DocumentRoot /var/www/local002.tld/forum
+    <Directory />
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+    <Directory /var/www/local002.tld/forum>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+    <Directory "/usr/lib/cgi-bin">
+        AllowOverride None
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.forum.local002.tld.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/access.forum.local002.tld.log combined
+
+</VirtualHost>
+
+ports.conf:
+
+# If you just change the port or add more ports here, you will likely also
+# have to change the VirtualHost statement in
+# /etc/apache2/sites-enabled/000-default
+# This is also true if you have upgraded from before 2.2.9-3 (i.e. from
+# Debian etch). See /usr/share/doc/apache2.2-common/NEWS.Debian.gz and
+# README.Debian.gz
+
+NameVirtualHost *:80
+NameVirtualHost *:443
+Listen 80
+
+<IfModule mod_ssl.c>
+    # If you add NameVirtualHost *:443 here, you will also have to change
+    # the VirtualHost statement in /etc/apache2/sites-available/default-ssl
+    # to <VirtualHost *:443>
+    # Server Name Indication for SSL named virtual hosts is currently not
+    # supported by MSIE on Windows XP.
+    Listen 443
+</IfModule>
+
+<IfModule mod_gnutls.c>
+    Listen 443
+</IfModule>
+
+source: https://forum.ubuntu-fr.org/viewtopic.php?id=858961
+
+Forcer la connexion en HTTPS
+
+Si vous voulez que votre site ne soit accessible qu'en HTTPS et que les internautes soient redirigés automatiquement, modifiez ainsi votre fichier d'hôte virtuel :
+
+<VirtualHost *:80>
+    ServerName example.com
+    ServerAlias www.example.com
+    ServerAdmin webmaster@example.com
+    # Redirection 301  vers le site en HTTPS
+    Redirect permanent / https://example.com/
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName example.com
+    ServerAlias www.example.com
+    ServerAdmin webmaster@example.com
+    DocumentRoot /srv/web/example.com/www
+	<Directory /srv/web/example.com/www>
+		Options -Indexes +FollowSymLinks +MultiViews
+		AllowOverride none
+		Require all granted
+	</Directory>
+
+       # directives obligatoires pour TLS
+      	SSLEngine on
+	SSLCertificateFile    /etc/letsencrypt/live/example.com/fullchain.pem
+	SSLCertificateKeyFile   /etc/letsencrypt/live/example.com/privkey.pem
+
+	Header always set Strict-Transport-Security "max-age=15768000"
+
+	ErrorLog /var/log/apache2/error.example.com.log
+	CustomLog /var/log/apache2/access.example.com.log combined
+</VirtualHost>

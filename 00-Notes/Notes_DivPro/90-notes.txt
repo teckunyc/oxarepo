@@ -1,0 +1,569 @@
+WEBSAAS
+asp-proxy[3,4,5,6] + proxy adm
+Relancer la synchro sur les ASP (niobium)
+# /opt/websaas/conf/sqlToproxyasp.sh /opt/websaas/conf/config.local >>/dev/null && /opt/websaas/conf/csync-proxyasp.sh /opt/websaas/conf/config.local >>/dev/null
+
+Rechercher dans les logs SQUID
+# grep -i "marie-sophie.delouis@gcc" /var/log/squid/access.log | egrep -i "echange.gcc.fr" >> /tmp/gcc.txt
+# squid-cat.sh /tmp/gcc.txt #(pour modifier le timestamp avec script de johann)
+------------------------------------------------------------------------
+HA PROXY
+Pouvez vous lancer la commande suivante :
+# pomha cfg build
+Ceci va reconstruire la configuration HA.
+ALOHA CA PASSWORD | magaBi+65
+------------------------------------------------------------------------
+modifier le check interval de l'ensemble des services d'un host via votre onglet SERVEUR.
+
+- Se connecter en SSH à la machine
+- Modifier le fichier config.inc
+# vi /etc/pom/gen/config.inc
+- Décommenter les lignes de la varibale HOST_CASCADE
+HOST_CASCADE=( notification_interval
+notification_period
+check_period )
+- Rajouter check_interval
+HOST_CASCADE=( notification_interval
+notification_period
+check_period
+check_interval )
+- Sauvegarder le fichier
+- Relancer l'update de la configuration de POM
+#pomgen -fi
+
+snmpwalk -m '' -M '' -ObentU -c public -v 2c <IP> .1 >/tmp/sophos.snmp
+--------------------------------------------------------------------
+	Connexion à la machine de GED ou se trouve arcserve :
+ssh listen@na.exosec.local -- -p 3389 201.31.231.150:3389%scapnor
+ssh listen@na.exosec.local -- -p 3389 201.2.231.150:3389%scapnor
+
+ssh listen@na.exosec.local -- -p 8443 10.1.3.40:443%expanscience
+ssh listen@na.exosec.local -- -p 8443 10.2.3.40:443%pom.expanscience
+Boitier Management : admin / StartMAIL2011
+POM CA:	h8fMcmu1E2jgTtOX
+-------------------------------------------------------------------
+zgrep housekeeper messages-2015*.gz | grep -A1 -B1 dump-rpm-added # chercher qqch et afficher les résultats avec 1 ligne avant et 1 ligne après le catch initial
+ grep -v firmware *.cg60 | less
+ ls -rhlt
+
+ tar c sw_* | ssh cmd@sodium.exosec.local c14 "tar xv -C /tmp" #expedier des données vers le serveur c14
+ ssh cmd@na cdgfw02.wfs 'tar c /tmp/testsrv.pcap' | tar x -C /home/Tao/Documents/WIP/Tech/Serenity/WFS_amadeus/  # demander à C14 d'aller chercher ...
+ ssh cmd@na oxygene.exosec.local 'tar c /data/DT/exosec/POM-License-CA-V1/archive/CH-FONTAIBLEAU.tar' | tar x -C /home/mike/temp/
+ ssh cmd@na arp-filter.unip 'tar c /var/log/dmicode.txt' | tar x -C /home/mike/temp
+ # ssh cmd@na pom.orpea 'tar c /var/backup/messages-201601*' | tar x -C /home/mike/temp && ssh cmd@na pom02.orpea 'tar c /var/backup/messages-201601*' | tar x -C /home/mike/temp
+
+ssh cmd@na pom02.orpea 'tar c /var/backup/pomag02.vrrp.pcap' | tar x -C /home/mike/temp & ssh cmd@na pom.orpea 'tar c /var/backup/pomag01.vrrp.pcap' | tar x -C /home/mike/temp
+ssh listen@na.exosec.local -- -p 8443 127.0.0.1:443%pom.orpea
+ssh cmd@na pom.scapnor  'tar c /home/admin/incoming/*.xls' | tar x -C /home/mike/temp
+
+ssh cmd@na oxygene.exosec.local 'tar c  /data/DT/apgis/CA/generated/amarsault'  | tar x -C /home/mike/temp
+
+Compression avec gzip (.tar.gz)
+Création
+# tar zcvf votre_archive.tar.gz votre_dossier/
+Extraction
+# tar xvf votre_archive.tar.gz -C <chemin/dest>
+# tar c /etc/pom/wui/nagios/timeperiode373.srv.cfg | ssh admin@172.18.3.51 "sudo tar xv -C /"
+   et
+# tar c /etc/pom/wui/nagios/timeperiode373.srv.cfg | ssh admin@172.18.3.52 "sudo tar xv -C /
+------------------------------------------------------------------------
+# netstat -lnpt
+# sudo netstat -alpen --inet | grep 3333
+# sudo netstat -tulp
+# sudo netstat -tupan | grep 161
+# dmesg | grep -v 'IN\='
+# rpm -qa | grep release
+------------------------------------------------------------------------
+- Age du système
+# sudo tune2fs -l $(df -h / |(read; awk '{print $1; exit}')) | grep -i created
+- IP système
+# ip -f inet a | awk '/inet / { print $2 }'
+
+# Extraire les Ip d'un fichier
+# grep  -Eo  \([0-9]\{1,3\}[\.]\)\{3\}[0-9] file | sort | uniq
+# Proc ouverts par $USER
+# ps aux |awk '{$1}  {++P[$1]} END {for(a in P) if (a !="USER") print a,P[a]}'
+# ps hax -o user | sort | uniq -c
+
+********************************************
+afficher trier suite à inodes full
+# cd /
+# for i in `ls -1A`; do echo "`find $i | sort -u | wc -l` $i"; done | sort -n
+egrep '(warning|error|fatal|panic):' /un/fichier/de/log | more
+# egrep -ir 'fatal|fail' /var/log/* | more
+# df -kTh
+# du -shm,du -sk $(/bin/ls -A) | sort -rn | head -10
+# find /data/naggen/ -type f -mtime +90 | xargs rm
+------------------------------------------------------------------------
+Cisco vlan add
+   #configure terminal
+   (config)#interface GigabitEthernet 0/11
+   (config-if)#switchport trunk allowed vlan add 231
+
+Cela permettra d'autoriser le  VLAN 231 sur le port Gi0/11 qui est relié au switch 2-1 (201.40.211.14).
+------------------------------------------------------------------------
+- Tcpdump
+# tcpdump -nni any src 201.12.211.100 and dst 201.13.233.5
+
+------------------------------------------------------------------------
+- Combien jours avant de la fin de l'année en cours
+# echo "There are $(($(date +%j -d"Dec 31, $(date +%Y)")-$(date +%j))) left in year $(date +%Y)."
+------------------------------------------------------------------------
+- Strace
+# alias debug='strace -f -e execve -s 1024 -p $(</var/nagios/nagios.pid) 2>&1 | grep'
+strace -ttvfo /tmp/logfile -s 1024 program
+# strace -p $(</var/nagios/nagios.pid) -e execve -s 512 -f 2>&1 |fgrep vmware
+------------------------------------------------------------------------
+- liste des paquets centos/red-hat
+
+# rpm -qa | grep pom
+# rpm -qa | grep release
+
+Chemin de conf housekeeper
+"/etc/pom/housekeeper.conf"		# dump_retention=5 (1.3.5.7...jours)
+
+- ajouter une Ip
+# ip addr add 163.172.240.129/32 dev eth0
+- changer l'heure
+
+- Se logguer en ssh
+- Passer en root : #root
+- Modifier l'horloge système : #date +%T -s "HH:MM:SS"
+- Synchroniser l'horloge matérielle à l'horloge système : #hwclock --systohc
+- Vérifier la sync des deux horloges : #date && hwclock
+---------------------------------------------------------------------
+comme solution "simple" pour reprendre la main et permettre de faire
+du nettoyage :
+   - supprimer un fichier de logs assez ancien et volumineux afin de
+     récupérer de la place (ou dans /data/naggen)
+   - redémarrer syslog-ng
+   - redémarrer proprement postgresql
+   - arrêter postgresql
+   - la service doit repartir normalement
+   - et ensuite faire le ménage dans la base, si la cause n'est pas
+immédiatement identifiée et corrigée, il faudrait dans un premier temps
+diminuer le délai de conservation dans la base et passer de 7 jours à 2
+jours (/etc/pom/logs/...).
+
+# service perf2rrd restart
+#
+# service ndoutils stop
+# mysqlcheck --auto-repair nagios
+# service ndoutils start
+# pomgen -fi
+# pomklive
+-----------------------------------------
+Sauvegarde de la plateforme
+
+Les éléments de configuration de la plateforme sont sauvegardés dans /var/backup/housekeeper par l'outil housekeeper qui est lancé automatiquement chaque nuit.
+Les données enregistrées en base de données et les logs sont dans /data
+La plateforme POM peut donc être reconstruite à partir des sauvegardes de ces deux répertoires.
+----------------------------------------------------
+sudo pomcfg set net−cidr=192.168.57.21/24 \
+                net−gw=192.168.57.1 \
+                ntp-server=192.168.57.10
+----------------------------------------------------
+rpm -qa | grep release
+df
+du -shm
+--------------------------------------------------------------------
+find /data/naggen/ -type f -mtime +90 | xargs rm
+find /var/log/ -type f -mtime +90
+service ndoutils stop
+--------------------------------------------------------------------
+Objet : Alerte de supervision Espace de stockage saturé SCADIFHUB01
+
+Bonjour,
+
+Votre application de supervision pom-monitoring, nous fait parvenir plusieurs alertes concernant:
+l'espace de stockage saturé des serveurs/machines ci-dessous.
+
+Entité: SCADIF
+ALERTES: ESPACE DE STOCKAGE
+ACTIONS PRÉCONISÉES: Suppression et/ou nettoyage des fichiers obsolètes
+MACHINE(s) IMPACTÉES : SCADIFHUB01.scadif | Disk CRITICALD: 96%=29.08GB (939.77MB free)
+
+       SCADIFHUB01 --> LIMITES ATTEINTES : 96 %
+
+Nous vous invitons à procéder au nettoyage et/ou à la suppression des fichiers devenus obsolètes ou inutiles, présents dans la partition mentionnée.
+Sans cela, les performances de la machine impactée vont êtres rapidement dégradées, ce qui peut entraîner des latences de fonctionnement, ou des erreurs de services ou système, non-négligeables.
+
+Nous restons à votre disposition pour tout renseignement complémentaire.
+
+Meilleurs sentiments
+
+mike
+--------------------------------------------------------------------
+ 	SCADIFHUB01.scadif 	DISK 	DISK CRITICAL: **D: 96%=29.08GB (939.77MB free)**,...
+--------------------------------------------------------------------
+Objet : Alerte de supervision: "Processus absent"
+
+Bonjour,
+
+Votre application de supervision pom-monitoring, nous fait parvenir plusieurs alertes concernant:
+l'absence d'un processus considéré comme CRITICAL.
+Le process absent est : "ntpd" (daemon de Maj time machine)
+-  	PROXY01.scaparf
+-  	PROXY02.scaparf
+
+Nous vous invitons à vérifier si toutefois il ne s'agirait pas d'un
+"faux-positif", et si tel n'était pas le cas, de relancer le service
+"ntpd".
+
+L'heure est un élement crucial concernant les échanges réseaux, et
+cette alerte concerne deux proxies. Il est donc primordial d'agir dans
+les meilleurs délais.
+
+Nous restons à votre disposition pour toute information complémentaire.
+
+Mike
+
+--------------------------------------------------------------------
+Objet : Alerte de supervision
+"Machine/hôte absent de l’infrastructure"
+
+
+Entité: DEVERYWARE
+
+Bonjour,
+
+Votre application de supervision pom-monitoring, nous fait parvenir plusieurs alertes concernant:
+l'absence d'un appareil déclaré, de votre infrastructure monitorée.
+		appareil ou host concerné
+
+		--- bde1tmp.deveryware
+		---->  	CRITICAL - Host Unreachable (195.130.222.19)
+
+Nous vous invitons à vérifier le hostname et la présence de cet appareil ou retirer ce dernier, des terminaux placés sous surveillance à l'aide de votre application POM-MONITORING.
+
+Nous restons à votre disposition pour toute information complémentaire.
+
+Mike
+
+------------------------------------------------------------------------
+
+Objet : Alerte de supervision Espace de stockage saturé SI-LOGCENTER
+
+Bonjour,
+
+Votre application de supervision pom-monitoring, nous fait parvenir plusieurs alertes concernant:
+l'espace de stockage saturé des serveurs/machines ci-dessous.
+
+Entité: cg60
+ALERTES: ESPACE DE STOCKAGE
+ACTIONS PRÉCONISÉES: Suppression et/ou nettoyage des fichiers obsolètes
+MACHINE(s) IMPACTÉES :  DISK sur SI-ADMBASTION.cg60 (192.168.7.14) | DISK CRITICAL: /var: 100%=14.41GB (0B free)
+
+Nous vous invitons à procéder au nettoyage et/ou à la suppression des fichiers devenus obsolètes ou inutiles, présents dans la partition mentionnée.
+Sans cela, les performances de la machine impactée vont êtres rapidement dégradées, ce qui peut entraîner des latences de fonctionnement, ou des erreurs de services ou système, non-négligeables.
+
+Nous restons à votre disposition pour tout renseignement complémentaire.
+
+Meilleurs sentiments
+
+mike
+----------
+Bonjour,<br>
+<br>
+Votre application de supervision pom-monitoring, nous fait parvenir plusieurs alertes concernant:<br>
+l'espace de stockage saturé des serveurs/machines ci-dessous.<br>
+<hr>
+Entité: cg60<br>
+ALERTES: ESPACE DE STOCKAGE quasi saturé (98%)<br>
+ACTIONS PRÉCONISÉES: Suppression et/ou nettoyage des fichiers obsolètes<br>
+MACHINE(s) IMPACTÉES :  <br>
+<ol>
+	<li><strong>- VC-VMFS sur vmp-vcenter55.cg60 (172.18.3.22) </strong></li>
+	<li><strong>     - VC-VMFS sur vmt-vcenter55.cg60 (172.18.3.22) </strong></li>
+</ol>
+<hr>
+Nous vous invitons à procéder au nettoyage et/ou à la suppression des fichiers devenus obsolètes ou inutiles, présents dans la partition mentionnée.<br>
+Sans cela, les performances de la machine impactée vont êtres rapidement dégradées, ce qui peut entraîner des latences de fonctionnement, ou des erreurs de services ou système, non-négligeables.<br>
+<br>
+Nous restons à votre disposition pour tout renseignement complémentaire.<br>
+<br>
+Meilleurs sentiments<br>
+<br>
+mike
+------------------------------------------------------------------------
+Objet : Alerte de supervision
+"Ldap-tools obsolètes"
+
+
+Entité: Conseil Général 60
+
+Bonjour,
+
+Votre application de supervision pom-monitoring, nous fait parvenir plusieurs alertes concernant:
+l'obsoléscence des outils LDAP présents sur la machine:
+		--- 	si-ldap.cg60
+		---->  	TOOLS CRITICAL - si-ldap tools status=Running-Old
+
+Nous vous invitons à upgrader votre système, notamment ces fameux outils complémentaires LDAP-tools.
+
+Nous restons à votre disposition pour toute information complémentaire et vous prions de croire en l'expression de nos sentiments les meilleurs.
+
+Mike
+
+
+------------------------------------------------------------------------
+Bonjour,
+
+Votre équipement déclaré: si-vmw-dmz2, nous fait parvenir quotidiennement des alertes de supervision:
+
+	- IO Critical (Input/Output, l'activité de l'appareil a atteint la valeur limite déclarée.
+
+Nous vous invitons à relever ces seuils dans votre fichier Plan-ip.xls, ainsi que de vous assurer que l'appareil est touours adapté, en terme de capacités/ressources, à votre infrastrucutre actuelle.
+
+Nous restons à votre disposition et vous prions de croire en l'expression de nos sentiments les meilleurs.
+
+Mike
+------------------------------------------------------------------------
+
+
+Restant à votre disposition, nous vous prions de croire en l'expression de nos sentiments les meilleurs.
+
+Mike
+
+
+
+
+
+/opt/websaas/conf/sqlToproxyasp.sh /opt/websaas/conf/config.local >>/dev/null && /opt/websaas/conf/csync-proxyasp.sh /opt/websaas/conf/config.local >>/dev/null
+
+[root@fphaupom01 data]# mv /tmp/
+Display all 253 possibilities? (y or n)
+[root@fphaupom01 data]# mv /tmp/*conf .
+mv: overwrite `./pg_hba.conf'? y
+mv: overwrite `./pg_ident.conf'? y
+mv: overwrite `./postgresql.conf'? y
+[root@fphaupom01 data]# ll
+total 80
+-rw------- 1 postgres postgres     4 Oct 22 11:44 PG_VERSION
+drwx------ 5 postgres postgres  4096 Oct 22 11:44 base
+drwx------ 2 postgres postgres  4096 Oct 22 11:44 global
+drwx------ 2 postgres postgres  4096 Oct 22 11:44 pg_clog
+-rw-r--r-- 1 root     root      3740 May 18  2014 pg_hba.conf
+-rw-r--r-- 1 root     root      1734 May 18  2014 pg_ident.conf
+drwx------ 2 postgres postgres  4096 Oct 22 11:44 pg_log
+drwx------ 4 postgres postgres  4096 Oct 22 11:44 pg_multixact
+drwx------ 2 postgres postgres  4096 Oct 22 11:44 pg_notify
+drwx------ 2 postgres postgres  4096 Oct 22 11:44 pg_serial
+drwx------ 2 postgres postgres  4096 Oct 22 11:44 pg_stat_tmp
+drwx------ 2 postgres postgres  4096 Oct 22 11:44 pg_subtrans
+drwx------ 2 postgres postgres  4096 Oct 22 11:44 pg_tblspc
+drwx------ 2 postgres postgres  4096 Oct 22 11:44 pg_twophase
+drwx------ 3 postgres postgres  4096 Oct 22 11:44 pg_xlog
+-rw-r--r-- 1 root     root     19077 May 18  2014 postgresql.conf
+[root@fphaupom01 data]# pwd
+/data/pgsql/9.1/data
+[root@fphaupom01 data]# cd ../../
+[root@fphaupom01 pgsql]# cd ../../
+[root@fphaupom01 /]# cd -
+/data/pgsql
+[root@fphaupom01 pgsql]# pwd
+/data/pgsql
+[root@fphaupom01 pgsql]# ll
+total 4
+drwxr-xr-x 3 root root 4096 Oct 22 11:44 9.1
+[root@fphaupom01 pgsql]# sudo -U postgres < /opt/pom/share/pom-box/
+migration-to-0.1.4-1.sh  migration-to-0.2-1.sh    migration-to-0.4-1.sh    mysql-db-alerting.sql    mysql-user-nagios.sql    pgsql-db-pom.sql         smb.conf.pom
+migration-to-0.1.5-1.sh  migration-to-0.2.2-1.sh  my.cnf.pom               mysql-db-nagios.sql      pg_hba.conf.pom          plan-ip.xls.pom
+migration-to-0.1.7-1.sh  migration-to-0.3-1.sh    mysql-cleanup.sql        mysql-user-events.sql    pg_ident.conf.pom        postgresql.conf.pom
+[root@fphaupom01 pgsql]# sudo -u postgres psql < /opt/pom/share/pom-box/pgsql-db-pom.sql
+psql: could not connect to server: No such file or directory
+        Is the server running locally and accepting
+        connections on Unix domain socket "/tmp/.s.PGSQL.5432"?
+[root@fphaupom01 pgsql]# service postgresql-9.1 start
+Starting postgresql-9.1 service:                           [  OK  ]
+[root@fphaupom01 pgsql]# sudo -u postgres psql < /opt/pom/share/pom-box/pgsql-db-pom.sql
+ERROR:  directory "/var/lib/pgsql/9.1/pom" does not exist
+ERROR:  tablespace "pom" does not exist
+\connect: FATAL:  database "pom" does not exist
+[root@fphaupom01 pgsql]# mkdir 9.1/pom
+[root@fphaupom01 pgsql]# ll 9.1/
+total 12
+drwx------ 14 postgres postgres 4096 Oct 22 11:46 data
+-rw-------  1 postgres postgres 1259 Oct 22 11:44 pgstartup.log
+drwxr-xr-x  2 root     root     4096 Oct 22 11:46 pom
+[root@fphaupom01 pgsql]# chown postgres:postgres 9.1/pom
+[root@fphaupom01 pgsql]# sudo -u postgres psql < /opt/pom/share/pom-box/pgsql-db-pom.sql
+CREATE TABLESPACE
+CREATE DATABASE
+You are now connected to database "pom" as user "postgres".
+CREATE SCHEMA
+CREATE SCHEMA
+ALTER DATABASE
+[root@fphaupom01 pgsql]# sudo -u postgres psql < /opt/pom/share/pom-elog/
+bookmark/               migration-to-0.10-1.sh  migration-to-0.10-2.sh  migration-to-0.9-1.sh
+[root@fphaupom01 pgsql]# sudo -u postgres psql < /opt/pom/share/pom-logs/
+migration-to-0.3-1.sh    migration-to-0.3-2.sh    mysql-user-logmatch.sql  pgsql-elog.sql           plan-log.xls.pom
+[root@fphaupom01 pgsql]# sudo -u postgres psql < /opt/pom/share/pom-logs/pgsql-elog.sql
+You are now connected to database "pom" as user "postgres".
+SET
+CREATE ROLE
+GRANT
+GRANT
+ALTER DEFAULT PRIVILEGES
+CREATE TYPE
+CREATE TABLE
+COMMENT
+CREATE FUNCTION
+CREATE TRIGGER
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+[root@fphaupom01 pgsql]# pg
+pg_dump      pg_dumpall   pg_restore   pgawk        pgrep        pgsql-chpwd
+[root@fphaupom01 pgsql]# pg
+pg_dump      pg_dumpall   pg_restore   pgawk        pgrep        pgsql-chpwd
+[root@fphaupom01 pgsql]# pgsql-chpwd
+[root@fphaupom01 pgsql]# psql
+psql (9.1.8)
+Type "help" for help.
+
+postgres=# \d pom
+Did not find any relation named "pom".
+postgres=# \c pom
+You are now connected to database "pom" as user "postgres".
+pom=# \d
+          List of relations
+ Schema |   Name   | Type  |  Owner
+--------+----------+-------+----------
+ data   | realtime | table | postgres
+(1 row)
+
+pom=# select count(*) from realtime
+pom-# ;
+ count
+-------
+     0
+(1 row)
+
+pom=# \q
+[root@fphaupom01 pgsql]#
+[root@fphaupom01 data]# mv /tmp/*conf .
+
+----------------------------------------------------------------------
+
+POM VM MIKE
+sudo pomcfg set net-cidr=10.9.3.210/255.255.255.0 \
+                net-gw=10.9.3.1 \
+                ntp-server=10.9.1.2 \
+                dns-server=10.9.1.2
+  ----------------------------------------------------------------------
+Avec cette commande tu verras ce que réalise le check :
+
+# sudo strace -p $(</var/nagios/nagios.pid) -e execve -s 512 -f 2>&1 |fgrep vmware
+
+
+[root@supinfrap01s ~]# date -d @1446655038
+ntpdate pool.ntp.org && hwclock --systohc && hwclock --adjust
+  ----------------------------------------------------------------------
+
+Bonjour,
+
+Suite à votre appel (sims@leclerc-socara.fr), vous souhaitez obtenir le retour des références de vos appareils HP.
+Dans cet optique, pourriez-vous nous retourner le résultat des cette commande:
+
+# snmpget -v $version -c "$community" -Oqnet -m "" -M "" $ip .1.3.6.1.2.1.1.{1,2,3,4,5,6}.0
+
+$version, $community, $ip sont à adapter selon votre configuration.
+
+Cordialement;
+
+Mike
+
+snmpwalk -m '' -M '' -ObentU -c public -v 2c <IP> .1 >/tmp/sophos.snmp
+
+Le public et 2c sont potentiellement à adapter.
+------------------------------------------------------------------------
+Voir tous les processus MYSQL
+# mysql
+# SHOW FULL PROCESSLIST\G
+# mysql>show slave status\G
+
+
++----------+--------------+-----------------+--------------+---------+------+-------+-----------------------+
+| NOM      | SERVICE      | HOST            | CONTACT      | Command | Time | State | Info                  |
++----------+--------------+-----------------+--------------+---------+------+-------+-----------------------+
+| 11690823 | nagiosevents | 127.0.0.1:46898 | nagiosevents | Sleep   |    4 |       | NULL                  |
+| 11691439 | nagiosevents | 127.0.0.1:47533 | nagiosevents | Sleep   |  706 |       | NULL                  |
+| 11750594 | root         | 127.0.0.1:52666 | NULL         | Query   |    0 | NULL  | show FULL processlist |
++----------+--------------+-----------------+--------------+---------+------+-------+-----------------------+
+<<-------------------------------------------------------------------------------->>
+- Whois simplifié:
+# curl ipinfo.io/$(IP)
+- Copie SCP
+# scp -R <machineSource>/foo/bar:<machine_cible>/foo/bar
+- Blacklist IP
+# ip route add blackhole $(IP_Cible)
+ip route add blackhole 185.159.36.11
+<<-------------------------------------------------------------------------------->>
+
+
+<<-------------------------------------------------------------------------------->>
+POSTFIX
+# postqueue -p
+
+
+<<-------------------------------------------------------------------------------->>
+APT
+# apt-cache policy <lePaquet>
+<<-------------------------------------------------------------------------------->>
+SUPERVISOR
+# supervisorctl | grep -i stopped
+# supervisorctl show status
+# supervisorctl remove <nomConsumer>
+
+
+--------------------------------------------------------------------------------
+# NOTIF MKL
+Bonjour,
+
+Nous sommes dans l'attente de votre retour d'information concernant votre demande.
+Sans réponse de votre service, nous procéderons à la fermeture de ce ticket, considérant que tout est en ordre.
+Si tel n'était pas le cas, merci de nous remonter toute anomalie afin que nous puissions réagir rapidement.
+
+Cordialement
+
+Mike
+
+--------------------------------------------------------------------------------
+# ajouter un utilisateur via chef/git
+
+ajouter à l'aide de la directive
+"sshd": {
+                        "sftp":{
+                                "umask": "0022",
+                                "accounts": [
+                                        {
+                                              "username": "icopitole",
+                                              "groupname": "sshgroup",
+                                              "home": "/space/home/icopitole/",
+                                              "password": "UrPhnzcQmwSD6",
+                                              "passwordauthentication": true,
+                                              "create_user": true
+                                        },
+                                        {
+                                              "username": "sap",
+                                              "groupname": "sshgroup",
+                                              "home": "/space/home/sap/",
+                                              "password": "S9TWHHJCYMWCE",
+                                              "passwordauthentication": true,
+                                              "create_user": true
+                                        }
+                                ]
+
+                          }
+}
+--------------------------------------------------------------------------------
+wiki client oxalyde
+se connecter à oxalide.web.wiki-01:/space/www/exploit.oxalide.com/keys# et se rendre dans le repertoire indiqué

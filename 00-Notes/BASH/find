@@ -1,0 +1,25 @@
+$ find /var/log/ -maxdepth 3 -name "*gz*" -ctime +5d
+
+Pour lister les fichiers qui ont été modifiés il y a moins de trois jours :
+
+$ find -mtime -3
+
+Pour lister les fichiers qui ont été ouverts (lus) il y a plus de 20 jours :
+
+$ find -atime +20
+
+  "ctime" pour "creation time" : permet de n'afficher que les fichiers
+  dont la création est plus ou moins vieille que le nombre de jour donné.
+
+  "atime" pour "access time" : permet de n'afficher que les fichiers
+  dont le dernier accès est plus ou moins vieux que le nombre de jour donné
+
+  "mtime" pour "modification time": permet de n'afficher que les fichiers dont
+  la dernière modification est plus ou moins vieille que le nombre de jour donné
+
+$ find /var/log/ -maxdepth 3 -name "*gz*" -ctime +30 -exec rm -f {} \;
+
+    "{}" permet d'afficher le nom du fichier trouvé
+    "\;" : permet de terminer la commande proprement
+
+Nous sommes libre d'effectuer la commande que l'on souhaite après le "-exec".

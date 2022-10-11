@@ -1,0 +1,64 @@
+#!/bin/bash
+
+BASE_D=$PWD
+SRV_F="$BASE_D/srv.info"
+XLS_D=/home/admin/incoming
+EXT=xls
+prefix=loc
+
+function usage {
+  cat <<EOF
+  Usage : $(basename $0 [-d])
+  $(basename $0) transfers *.xls files from a POM server to your computer
+    using rsync over ssh.
+  Connection informations are stored in a flat file that must be in your
+    destination computer directory and must be named srv.info
+  For a srv.info example file, see below.
+
+  Optionnal arguments : 
+    -d : distant connection (from Exosec)
+
+  srv.info example file :
+EOF
+  cat $HOME/bin/srv.info.sample
+}
+
+
+
+set -f
+while [ $# -gt 0 ] ; do
+  case "$1" in
+    # standard nagios parameters
+    -h|--help)        usage         ; exit 0   ;;
+    -d|--distant)     prefix='dist'            ;;
+  esac
+  shift
+done
+set +f
+
+[ ! -s $SRV_F ] && { echo "Error : $SRV_F not readable or empty" ; exit 1 ; }
+
+source $SRV_F
+
+# compose variables depending on prefix witch is 'loc' or 'dist'
+tmpvar="${prefix}srv"
+srv=${!tmpvar}
+
+tmpvar="${prefix}_rsync"
+_rsync=${!tmpvar}
+
+tmpvar="${prefix}user"
+user="${!tmpvar:-admin}"
+
+XLS_D=${srcdir:-/home/admin/incoming/*.xls}
+
+# DEBUG : list variable values
+for v in srv _rsync; do 
+  echo "$v = ${!v}"
+done
+
+# get xml files
+echo "$_rsync ${user}@$srv:${XLS_D} ."
+eval "$_rsync ${user}@$srv:${XLS_D} ."
+
+exit $?

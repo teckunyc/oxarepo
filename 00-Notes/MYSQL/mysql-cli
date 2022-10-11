@@ -1,0 +1,18 @@
+COMMANDES UTILES
+
+Effectuer un backup
+# mysqldump -h localhost -u root -pmypassword databasename > dumpfile.sql
+--> "mysqldump -h localhost -u root -p2Uad7as9 database01 > dumpfile.sql"
+– “2Uad7as9″ is the password for your root mysql user;
+– “database01″ is the name of the mysql database that you want to backup;
+– “dumpfile.sql” is the name of the mysql dump/backup file that you want to create.
+# mysqldump -u root -p --single-transaction --add-drop-dabatase --databases web01 > web01_jeudi19nov.sql
+
+Recupérer la taille d'une base de données
+# SELECT sum( data_length + index_length) / 1024 / 1024 " Taille en Mo" FROM information_schema.TABLES WHERE table_schema = "NOMDELABASE" GROUP BY table_schema;
+
+Replication:
+https://www.it-connect.fr/replication-en-temps-reel-masterslave-mysql%EF%BB%BF/
+
+Reparer base
+# repair table nombase.nomtable;

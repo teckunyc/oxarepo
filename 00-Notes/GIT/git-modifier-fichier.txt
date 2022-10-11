@@ -1,0 +1,131 @@
+ENREGISTRER DES MODIFICATIONS DANS LE REPO
+
+Vous avez à présent un dépôt Git valide et une extraction d'un projet.
+
+L'outil pour déterminer les fichiers et leur état est:
+
+$ git status
+
+Si vous lancez cette commande juste après un clonage:
+
+    $ git status
+    On branch master
+    nothing to commit, working directory clean
+
+
+Supposons que vous ajoutiez un nouveau fichier, si ce fichier
+n'existait pas auparavant, et que vous lancez la commande "$ git status"
+
+    $ touch LISEZMOI
+    $ git status
+    On branch master
+    Untracked files:
+      (use "git add <file>..." to include in what will be committed)
+
+            LISEZMOI
+
+    nothing added to commit but untracked files present (use "git add" to track)
+
+Vous constatez que votre nouveau fichier LISEZMOI apparaît dans la section
+« Untracked files ».
+ Un « Untracked » signifie simplement que Git détecte un fichier qui n'était pas
+présent dans le dernier instantané; Git ne le placera sous tracking uniquement
+lorsque vous lui indiquerez de le faire.
+
+ Pour commencer à suivre un nouveau fichier, il vous faut utiliser la commande
+
+ $ git add <file>
+
+ Pour commencer à suivre le fichier LISEZMOI, vous pouvez entrer ceci :
+
+    $ git add LISEZMOI
+
+ Si vous lancez à nouveau la commande git status:
+
+   $ git status
+   On branch master
+   Changes to be committed:
+     (use "git reset HEAD <file>..." to unstage)
+
+           new file:   LISEZMOI
+
+La mention « Changes to be committed » (Modifications à valider) permet de vous
+assurer que le fichier est topé "à Indexer" par Git.
+La commande "$ git add" accepte en paramètre un chemin qui correspond soit:
+- un fichier
+- un répertoire ; (dans le cas d'un répertoire, la commande ajoute récursivement
+tous les fichiers de ce répertoire.
+
+INDEXER DES FICHIERS MODIFIÉS
+
+ Maintenant, modifions un fichier qui est déjà sous suivi de version.
+ Si vous modifiez le fichier sous suivi de version appelé benchmarks.rb
+ et que vous lancez à nouveau votre commande git status, vous verrez ceci :
+
+ $ git status
+ On branch master
+ Changes to be committed:
+   (use "git reset HEAD <file>..." to unstage)
+
+         new file:   LISEZMOI
+
+ Changes not staged for commit:
+   (use "git add <file>..." to update what will be committed)
+   (use "git checkout -- <file>..." to discard changes in working directory)
+
+         modified:   benchmarks.rb
+
+ Le fichier benchmarks.rb apparaît sous la section nommée
+ « Changes not staged for commit » ce qui signifie que le fichier tracké a été
+ modifié dans la copie de travail mais n'est pas encore indexé.
+ Pour l'indexer, il faut lancer la commande "$ git add"</foo/bar/file> (cf: L54)
+
+   $ git add benchmarks.rb
+   $ git status
+   On branch master
+   Changes to be committed:
+     (use "git reset HEAD <file>..." to unstage)
+
+           new file:   LISEZMOI
+           modified:   benchmarks.rb
+
+Les deux fichiers sont indexés et feront partie de la prochaine validation ou
+"commit".
+Si vous deviez modifier ces fichiers avant de commité la nouvelle version, cela
+sera pris en compte par Git. Pour s'en assurer, toujours lancer "$ git status"
+
+   $ vim benchmarks.rb
+   $ git status
+   On branch master
+   Changes to be committed:
+     (use "git reset HEAD <file>..." to unstage)
+
+           new file:   LISEZMOI
+           modified:   benchmarks.rb
+
+   Changes not staged for commit:
+     (use "git add <file>..." to update what will be committed)
+     (use "git checkout -- <file>..." to discard changes in working directory)
+
+           modified:   benchmarks.rb
+
+À présent, benchmarks.rb apparaît à la fois comme indexé et non indexé.
+En fait, Git indexe un fichier dans son état au moment où la commande
+"$ git add" est lancée. Si on valide les modifications maintenant, la version de
+ benchmarks.rb qui fera partie de l'instantané est celle correspondant au moment
+ où la commande git add benchmarks.rb a été lancée, et non la version actuelle.
+ Si le fichier est modifié après un "$ git add", il faut la relancer pour
+ prendre en compte l'état actuel du fichier modifié plusieurs fois avant commit.
+
+     $ git add benchmarks.rb
+     $ git status
+     On branch master
+     Changes to be committed:
+       (use "git reset HEAD <file>..." to unstage)
+
+             new file:   LISEZMOI
+             modified:   benchmarks.rb
+
+Reseter les fichiers nouvellement "added
+"             
+$ for f in `git status | grep new | awk '{print $3}'`; do git reset HEAD $f ; done

@@ -1,0 +1,142 @@
+TAR COMMAND EXAMPLES USAGE AND OPTIONS
+
+    c – create a archive file.
+    x – extract a archive file.
+    v – show the progress of archive file.
+    f – filename of archive file.
+    t – viewing content of archive file.
+    j – filter archive through bzip2.
+    z – filter archive through gzip.
+    r – append or update files or directories to existing archive file.
+    W – Verify a archive file.
+    wildcards – Specify patters in unix tar command.
+
+
+CREATE TAR ARCHIVE
+
+Create a tar archive file called archive.tar for a directory /home/cyberpunk/testdir in current working directory:
+
+$ tar -cvf archive.tar /home/cyberpunk/testdir/
+
+/home/cyberpunk/testdir/
+/home/cyberpunk/testdir/file1.txt
+/home/cyberpunk/testdir/file2.sh
+/home/cyberpunk/testdir/file3.tar
+
+Option used in this example are:
+
+    c – Creates a new .tar archive file.
+    v – Verbosely show the .tar file progress.
+    f – File name type of the archive file.
+
+
+CREATE COMPRESSED TAR.GZ ARCHIVE
+
+To create a compressed gzip archive we need use switch ‘z’.
+
+$ tar cvzf compressedArchive.tar.gz /home/cyberpunk/testdir
+
+/home/cyberpunk/testdir/
+/home/cyberpunk/testdir/file1.txt
+/home/cyberpunk/testdir/file2.jpg
+/home/cyberpunk/testdir/file3.png
+
+
+Compress Even More – tar.bz2
+
+Tar can create archives which are smaller than gzip file.
+To create highly compressed tar file you will need to pass a “j” switch to tar
+command. bz2 option takes more time to perform archive compression and
+decompression than gzip would take.
+Usually this time difference is negligible, but if you are archiving huge files,
+or very large number of files these timings add up and time difference can be
+significant.
+
+$ tar cvfj Archive.tar.bz2 /home/cyberpunk/testdir
+
+/home/cyberpunk/testdir/
+/home/cyberpunk/testdir/file1.txt
+/home/cyberpunk/testdir/file2.txt
+/home/cyberpunk/testdir/file3.txt
+
+
+unTAR ARCHIVE
+
+To untar ( extract ) a tar file, pass the ‘x‘ (extract) switch to the command
+Issuing command without ‘-C’ switch will extract the archive in the current
+working directory. The -C switch tells the command WHERE to extract archives.
+
+$ tar -xvf Archive.tar -C /home/cyberpunk/testdir/
+
+/home/cyberpunk/testdir/
+/home/cyberpunk/testdir/file1.txt
+/home/cyberpunk/testdir/file2.txt
+/home/cyberpunk/testdir/file3.txt
+
+
+EXTRACT TAR.GZ ARCHIVE ?
+
+$ tar -xvf Archive.tar.gz
+
+/home/cyberpunk/testdir/
+/home/cyberpunk/testdir/file1.txt
+/home/cyberpunk/testdir/file2.txt
+/home/cyberpunk/testdir/file3.txt
+
+…and tar.bz2
+
+$ tar -xvf Archive.tar.bz2
+
+/home/cyberpunk/testdir/
+/home/cyberpunk/testdir/file1.txt
+/home/cyberpunk/testdir/file2.txt
+/home/cyberpunk/testdir/file3.txt
+
+
+LIST CONTENT
+
+To list the content of a tar archive use ‘ t ‘ switch:
+
+# tar -tvf uploadprogress.tar
+
+-rwxr--r-- root/root   1111 2014-10-19 12:33:42 file1.txt
+-rwxr--r-- root/root   1111 2014-10-19 12:33:42 file2.txt
+-rwxr--r-- root/root   1111 2014-10-19 12:33:42 file3.txt
+-rwxr--r-- root/root   1111 2014-10-19 12:33:42 file4.txt
+
+
+EXTRACT SINGLE FILE FROM TAR ARCHIVE
+
+To extract a single file called file1.txt from archive.tar use this command.
+
+$ tar --extract --file=archive.tar file1.txt
+
+file1.txt
+
+
+EXTRACT MULTIPLE FILES FROM TAR ARCHIVE
+
+To extract multiple files:
+
+$ tar -xvf Archive.tar "file 1" "file 2"
+
+
+EXTRACT GROUP OF FILES USING WILDCARD
+
+To extract a group of files we can use a wildcard format:
+
+# tar -xvf Archive.tar --wildcards *.txt'
+
+/home/cyberpunk/testdir/file1.txt
+/home/cyberpunk/testdir/file2.txt
+/home/cyberpunk/testdir/file3.txt
+
+
+ADD FILES OR DIRECTORIES TO TAR ARCHIVE
+
+To add files or directories to existing tar file you can use the ‘ r ‘ switch.
+For example we add file xyz.txt and directory php to existing tar archive file.
+
+# tar -rvf Archive.tar xyz.txt  #add file
+or
+# tar -rvf Archive.tar php      # add directory

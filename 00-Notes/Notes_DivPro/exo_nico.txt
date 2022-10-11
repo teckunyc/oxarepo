@@ -1,0 +1,3 @@
+$ awk -F "dst=" -v IGNORECASE=1 '/192.168.20[12].20/ && /open/ && /http/ {sub(":.*$", "", $2); t[$2]++} END {for (n in t) print n "\t" t[n]}' $fichier
+
+grep -i postfix 2015-07-23.log | grep -i "Client host rejected" | awk '{print $20,$21'} | sort -nk 1 | uniq -c | sort -nk 2

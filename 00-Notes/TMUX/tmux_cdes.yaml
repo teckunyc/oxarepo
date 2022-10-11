@@ -1,0 +1,119 @@
+# tmux commandes CLI
+# Nouvelle session
+# Infos tmux
+# $ tmux info
+
+    - Start a new session
+$ tmux
+
+    - Start a new named session
+$ tmux new -s session_name
+
+    - Show all sessions
+$ tmux ls
+
+# Attacher une session existante [Attach session]
+
+    - Attach to last session
+$ tmux a
+
+    - Attach to named
+$ tmux a -t session_name
+
+# Tuer les processus tmux
+
+    - Kill a session by name
+$ tmux kill-ses -t session_name
+
+    - Kill sessions but the current
+$ tmux kill-ses -a
+
+    - Kill sessions but 'myname'
+$ tmux kill-ses -a -t session_name
+
+# Charger une config tmux
+
+    - Reload config
+$ tmux source-file ~/.tmu­x.conf
+
+    - Show config
+$ tmux show-options -g
+
+# Activer le mode "copy"
+
+Ctrl+b [: 	Enter copy mode
+<Space>: 	Start selection
+Enter: 	  Copy selection
+q: 	      Quit copy mode
+Ctrl+b ]: 	Paste contents of buffer_0
+#modif du copier/coller
+Now try it out!
+1. Enter tmux copy mode with ctrl + b [
+2. Select the text you would like to copy with v
+3. Press Enter to copy the text to the tmux buffer AND the clipboard
+4. Paste the text in another terminal window using standard paste commands (shift + insert)! BOOM! PASTED!
+
+# Raccourcis tmux
+
+## Session (Set of Windows)
+Ctrl+b ?: 	List all shortcuts
+Ctrl+b d: 	Detach from session
+Ctrl+b s: 	Show all sessions
+Ctrl+b $: 	Rename session
+Ctrl+b ( / ): 	Previous/Next session
+## panes (Splits)
+Ctrl+b " / %: 	Split Horiz/Vert
+Ctrl+b !: 	Pane -> Window
+Ctrl+b x: 	Kill pane
+Ctrl+b <Arrow> :	Navigate panes
+Ctrl+b <Space>: 	Toggle layouts
+Ctrl+b { / }: 	Move to Left/Right
+Ctrl+b o: 	Goto next panes
+Ctrl+b z: 	toggle full-screen
+Ctrl+b ;: 	Toggle Last pane
+Ctrl+b q: 	Show numbers
+Ctrl+b q: 0...9 	Goto # pane
+## Window (Tabs)
+Ctrl+b c: 	Create window
+Ctrl+b p: / n 	Previous/Next window
+Ctrl+b ": / % 	Split Horiz/Vert
+Ctrl+b w: 	List window
+Ctrl+b ,: 	Rename window
+Ctrl+b f: 	Find window
+Ctrl+b l: 	Last window
+Ctrl+b .: 	Move window
+Ctrl+b &: 	Close window
+Ctrl+b 0...9: 	Goto # window
+
+# Tmux Command Mode
+Ctrl+b :: 	Enter command mode(ctrl+b  :)
+
+## Resizing
+resize-pane -D 20 	Resize down
+resize-pane -U 20 	Resize up
+resize-pane -L 20 	Resize left
+resize-pane -R 20 	Resize right
+## Listing
+list-keys 	All commands
+list-panes 	All panes
+list-windows 	All Windows
+## Copying
+list-buffers 	List all buffers
+show-buffer 	Show #0 contents
+capture-pane 	Copy of pane
+choose-buffer 	Show and paste
+save-buffer a.txt 	Save to file
+delete-buffer -b 1 	Delete buffer 1
+## Setting
+set -g OPTION 	Set for all sessions
+setw -g OPTION 	Set for all windows
+setw -g mode-keys vi 	Enable vi-mode
+set -g prefix C-a 	Set prefix
+## Misc
+swap-pane -s 3 -t 1 	Swap pane
+swap-window -t -1 	Move to left
+setw synchronize-panes 	Sync Panes
+join-pane -t :# 	Join pane
+
+# synchronize panes
+crtb+:: set-window-option synchronize-panes (on|off)

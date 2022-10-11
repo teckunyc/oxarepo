@@ -1,0 +1,52 @@
+liste des ports d'écoute et de leurs processus propriétaires sous Linux:
+  # netstat -luntp
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address Foreign Address  State   PID/Program name
+tcp        0      0 0.0.0.0:22    0.0.0.0:*        LISTEN  1679/sshd
+udp        0      0 0.0.0.0:68    0.0.0.0:*                1766/dhclient
+
+liste des ports d'écoute sous FreeBSD, exécutez cette commande :
+  # netstat -a -n | egrep 'Proto|LISTEN'
+Proto Recv-Q Send-Q  Local Address          Foreign Address        (state)
+tcp4       0      0  *.587                  *.*                    LISTEN
+tcp4       0      0  *.25                   *.*                    LISTEN
+tcp4       0      0  *.22                   *.*                    LISTEN
+tcp4       0      0  *.993                  *.*                    LISTEN
+tcp4       0      0  *.143                  *.*                    LISTEN
+tcp4       0      0  *.53                   *.*                    LISTEN
+
+Si vous avez des doutes sur les services qui s'exécutent généralement sur un port
+donné, éliminez le commutateur -n de netstat (qui indique à netstat d'utiliser
+des noms mais peut prendre beaucoup plus de temps à s'exécuter lors de la
+recherche d'adresses DNS) ou grep manuellement le /etc /fichier services:
+  # grep -w 993 /etc/services
+imaps           993/udp     # imap4 protocol over TLS/SSL
+imaps           993/tcp     # imap4 protocol over TLS/SSL
+
+Also notice that, unlike the output of netstat on Linux, we don't get the PIDs of the daemons themselves. You might also notice that no UDP ports were listed for DNS. This is because UDP sockets do not have a LISTEN state in the same sense that TCP sockets do. In order to display UDP sockets, you must add udp4 to the argument for egrep, thus making it 'Proto|LISTEN|udp4'. However, due to the way UDP works, not all UDP sockets will necessarily be associated with a daemon process.
+Under FreeBSD, there is another command that will give us just what we want. The sockstat command performs only a small subset of what netstat can do, and is limited to just listing information on both Unix domain sockets and Inet sockets.
+To get a list of listening ports and their owning processes with sockstat, run this command:
+# sockstat -4 -l
+USER     COMMAND    PID   FD PROTO  LOCAL ADDRESS        FOREIGN ADDRESS
+root     sendmail  1141    4 tcp4   *:25                 *:*
+root     sendmail  1141    5 tcp4   *:587                *:*
+root     sshd      1138    3 tcp4   *:22                 *:*
+root     inetd     1133    4 tcp4   *:143                *:*
+root     inetd     1133    5 tcp4   *:993                *:*
+named    named     1127   20 tcp4   *:53                 *:*
+named    named     1127   21 udp4   *:53                 *:*
+named    named     1127   22 udp4   *:1351               *:*
+
+Once again, we see that sshd, SMTP, DNS, IMAP, and IMAP+SSL services are running, but now we have the process that owns the socket plus its PID. We can now see that the IMAP services are being spawned from inetd instead of standalone daemons, and that sendmail and named are providing the SMTP and DNS services.
+For most other Unix-like operating systems you can use the lsof utility (http://ftp.cerias.purdue.edu/pub/tools/unix/sysutils/lsof/). lsof is short for "list open files" and, as the name implies, allows you to list files that are open on a system, in addition to the processes and PIDs that have them open. Since sockets and files work the same way under Unix, lsof can also be used to list open sockets. This is done with the -i command-line option.
+To get a list of listening ports and the processes that own them using lsof, run this command:
+# lsof -i -n | egrep 'COMMAND|LISTEN'
+COMMAND   PID   USER FD  TYPE     DEVICE SIZE/OFF NODE NAME
+named    1127 named  20u IPv4 0xeb401dc0      0t0  TCP *:domain (LISTEN)
+inetd    1133  root   4u IPv4 0xeb401ba0      0t0  TCP *:imap (LISTEN)
+inetd    1133  root   5u IPv4 0xeb401980      0t0  TCP *:imaps (LISTEN)
+sshd     1138  root   3u IPv4 0xeb401760      0t0  TCP *:ssh (LISTEN)
+sendmail 1141  root   4u IPv4 0xeb41b7e0      0t0  TCP *:smtp (LISTEN)
+sendmail 1141  root   5u IPv4 0xeb438fa0      0t0  TCP *:submission (LISTEN)
+
+Again, you can change the argument to egrep to display UDP sockets. However, this time use UDP instead of udp4, which makes the argument 'COMMAND|LISTEN|UDP'. As mentioned earlier, not all UDP sockets will necessarily be associated with a daemon process.

@@ -1,0 +1,46 @@
+DOCKER CDE
+  $ docker search ubuntu
+  $ docker images
+  $ docker pull ubuntu:14.04
+  $ docker pull nginx
+  $ docker rename [containerOLD] [container_NEW]
+  $ docker commit [container] [image_NEW]
+  $ docker tag [image:tag_OLD] [image:tag_NEW]
+  $ docker info
+  $ docker run -ti $(image) /foo/bar
+  $ docker rm $(docker_cont_ID)
+  $ docker rmi $(images_docker_ID)
+  $ docker inspect $(docker_cont_ID)
+  $ docker rm -v $(docker ps -aqf status=exited)
+  $ docker rmi $(docker images -qf dangling=true)
+  S docker volume rm $(docker volume ls -qf dangling=true)
+  $ docker rm 'docker ps -lq'
+  $ docker stop `docker ps -a -q`
+  $ docker history $(docker_cont_ID)
+  $ docker run -d --name webServer -v /mnt/docker/shares/web/html/:/usr/share/nginx/html:ro -p 80:80 -d nginx
+  $ docker run --interactive --tty [image_docker:version] bash
+  $ docker run -ti [image_docker:version] bash
+  $ docker attach --sig-proxy=false webServer
+  $ docker run --cpus-set 0 <image> <commande>
+  $ docker run -tid -v "$(pwd)/:/workspace" <image_docker>
+  $ docker run -di --name ubuntu ubuntu:latest
+
+Tips:
+Créer un réseau:
+  $ docker networks nom_du_reseau
+
+Lister les IP des containers:
+for id in $(docker ps -aq); do docker inspect -f "{{.Name}} -- {{.NetworkSettings.IPAddress}}" $id;done
+
+Effacer les éléments non-utilisés
+  $ docker docker prune
+
+Effacer les volumes non-utilisés
+  $ docker volume prune
+
+DOCKER-COMPOSE
+  $ sudo docker-compose -f lefichier.yml up -d
+  $ sudo docker-compose -f lefichier.yml stop #les containers sont conservés)
+  $ sudo docker-compose -f lefichier.yml down #les containers sont détruits)
+
+

@@ -1,0 +1,25 @@
+version: '3'
+services:
+  httpd:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - /mnt/docker/shares/web/html:/var/www/html
+    networks:
+      - httpdphpfpm
+
+  phpfpm:
+    image: "php:7.4-fpm-buster"
+    expose:
+      - 9000
+    volumes:
+      - /mnt/docker/shares/web/html:/var/www/html
+    networks:
+      - httpdphpfpm
+
+networks:
+  httpdphpfpm:
+    driver: bridge

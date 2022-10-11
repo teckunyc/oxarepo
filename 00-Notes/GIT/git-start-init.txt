@@ -1,0 +1,17 @@
+- DÉMARRER UN DÉPÔT GIT
+Si vous commencez à suivre un projet existant dans Git, vous n'avez qu'à vous positionner dans le répertoire du projet et saisir :
+
+# $ git init
+
+Cela crée un nouveau sous-répertoire nommé ".git" qui contient tous les fichiers nécessaires au dépôt:
+—> un "squelette de dépôt Git".
+Pour l'instant, aucun fichier n'est encore versionné.
+
+Si vous souhaitez commencer à suivre les versions des fichiers existants (contrairement à un répertoire vide),
+vous devriez probablement commencer par indexer ces fichiers et faire une validation initiale.
+Vous pouvez réaliser ceci avec une poignée de commandes git add qui spécifient les fichiers que vous souhaitez suivre,
+suivie d'une validation :
+
+$ git add *.c
+$ git add README
+$ git commit –m 'version initiale du projet'
